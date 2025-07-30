@@ -11,7 +11,7 @@
 #define WIFI_TIMEOUT_MS 20000
 
 
-const byte ConnectionIndicator = 33;
+const byte LaserOnIndicator = 33;
 const byte ResetBoard = 32;
 const byte LaserCrossed = 21;
 bool ShouldReset = false;
@@ -118,12 +118,12 @@ void setup() {
  Serial.begin(115200);
  Serial.println();
  Serial.println("Hello");
- pinMode(ConnectionIndicator,OUTPUT);
+ pinMode(LaserOnIndicator,OUTPUT);
  pinMode(ResetBoard,INPUT_PULLDOWN); // reset button is at LOW
- pinMode(LaserCrossed,INPUT_PULLDOWN);
+ pinMode(LaserCrossed,INPUT_PULLUP); // Laser is at High (to simulate the real case)
 
  attachInterrupt(digitalPinToInterrupt(ResetBoard), reset, RISING);
- attachInterrupt(digitalPinToInterrupt(LaserCrossed), SaveTimeOfCrossing, RISING);
+ attachInterrupt(digitalPinToInterrupt(LaserCrossed), SaveTimeOfCrossing, FALLING);
  
   BroadcastAP();
   initLittleFS();
@@ -146,7 +146,14 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  
+  if(digitalRead(LaserCrossed)==HIGH){
+    digitalWrite(LaserOnIndicator,HIGH); // in the real use case this will help setup the laser
+                                         // at the correct angle and height ...   
+    
+  }
+  else{
+    digitalWrite(LaserOnIndicator,LOW); 
+  }
   
       
   if(ShouldReset){
