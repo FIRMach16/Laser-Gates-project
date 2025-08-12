@@ -37,3 +37,39 @@ body {
     font-size: 1.2rem;
     color: #1282A2;
 }
+.Buttons{
+    max-width: 800px;
+    margin: 100px   auto;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.Button {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    
+}
+.Button button:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+.Button button {
+    background-color: white;
+    cursor: pointer;
+    border: none;
+    box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+}
+
+
+
+.Button img.pauseButton{
+    background-color: white;
+    width: 100%;
+
+}
+.Button img.resetButton {
+    background-color: white;
+    width: 56%;
+}

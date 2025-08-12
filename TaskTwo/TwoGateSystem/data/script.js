@@ -10,6 +10,21 @@ function onload(event) {
 function getReadings(){
     websocket.send("getReadings");
 }
+function ResetLaserGates(){
+    
+    
+    document.getElementById('TimeStamp').innerHTML ="--.--"
+    document.getElementById('Gate1Speed').innerHTML ="--.--"
+    document.getElementById('Gate2Speed').innerHTML ="--.--"
+    websocket.send("reset");
+
+}
+//use case measure only the speed of entry instead of resetting everything 
+function PauseLaserGates(){
+    
+    websocket.send("pause");
+    
+}
 
 function initWebSocket() {
     console.log('Trying to open a WebSocket connection…');
@@ -41,3 +56,12 @@ function onMessage(event) {
         document.getElementById(key).innerHTML = myObj[key];
     }
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('reset')
+        .addEventListener('click', ResetLaserGates);
+});
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('pause')
+        .addEventListener('click', PauseLaserGates);
+});
