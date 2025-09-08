@@ -13,7 +13,7 @@ function getReadings(){
 function ResetLaserGates(){
     
     
-    document.getElementById('TimeStamp').innerHTML ="--.--"
+    document.getElementById('Time').innerHTML ="--.--"
     document.getElementById('Gate1Speed').innerHTML ="--.--"
     document.getElementById('Gate2Speed').innerHTML ="--.--"
     websocket.send("reset");
