@@ -6,4 +6,4 @@ The system is still in active development. I’ve made this repository public to
 ## Tasks:
 These tasks are milestones in the project that demonstrate my learning process: 
 - [TaskOne](TaskOne/) : Creating a websocket and publishing the timestamp on a button click
-- [TaskTwo](TaskTwo/) : A two gates system (uses button for now) that communicates VIA ESP-NOW and publish the metrics (Time diffrence ,2 Instant Speeds) with websocket, #TODO :**Measure the 2 way latencey of the ESP protocol to verify time keeping accuracy**
+- [TaskTwo](TaskTwo/TwoGateSystem/) : A two gates system (uses button for now) that communicates VIA ESP-NOW and publish the metrics that i think are important (Time diffrence ,2 Instant Speeds for each gate) with websocket, **TODO :Measure the 2 way latencey of the ESP protocol to verify time keeping accuracy**
