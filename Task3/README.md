@@ -36,7 +36,7 @@ As this is a learning project, I chose to structure my approach using the **Agil
 
 ## 4. progression
 
-- **Sprint1** Managed to get data from the esp32 server still not updating UI 
+- **Sprint1** Managed to get data from the esp32 server still not updating UI (delayed by 2 days on the expected timeframe mainly due to learning process)
 
 Problems to fix : (App don't connect automatically to the ESP32 network , the communication happen in plaintext (potential security issues?) [config](./AndroidApp/app/src/main/res/xml/network_security_config.xml) , polymorphism for @Serialisable data classes may not be the correct way to go)
 
