@@ -33,3 +33,8 @@ As this is a learning project, I chose to structure my approach using the **Agil
 - **Sprint 2**: Add UI for history tracking and progression.  
 - **Sprint 3**: Add navigation between screens and input for distance.  
 - **Sprint 4**: Explore coach mode and optional cloud integration.  
+
+## 4. progression
+
+- **Sprint1** Managed to get data from the esp32 server still not updating UI 
+![alt text](image.png)
