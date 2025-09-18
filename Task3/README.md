@@ -34,12 +34,20 @@ As this is a learning project, I chose to structure my approach using the **Agil
 - **Sprint 3**: Add navigation between screens and input for distance.  
 - **Sprint 4**: Explore coach mode and optional cloud integration.  
 
-## 4. progression
+## 4. Progression
 
-- **Sprint1** Managed to get data from the esp32 server still not updating UI (delayed by 2 days on the expected timeframe mainly due to learning process)
+- **Sprint1** Managed to get data from the esp32 server still not updating UI (delayed by 2 days on the expected timeframe mainly due to learning process).
 
-Problems to fix : (App don't connect automatically to the ESP32 network , the communication happen in plaintext (potential security issues?) [config](./AndroidApp/app/src/main/res/xml/network_security_config.xml) , polymorphism for @Serialisable data classes may not be the correct way to go)
+Problems to fix : 
+1. App don't connect automatically to the ESP32 network (Right now I need to connect manually).
+2. The communication happen in plaintext (potential security issues?) [config](./AndroidApp/app/src/main/res/xml/network_security_config.xml).
+3. Multipe @Serialisable data classes may not be the correct way to go for data acquisition.
 
 **Demo on physical emulator using the logging utility:**
 ![alt text](image.png)
+
+
+- **Sprint2** (In Progress):
+
+This will include managing a database to save data and another activity that will be connected to two fragments, the activity will show the latest performance of the sprinter and also his PB (Personal Best) in avreage speed and instatnous speed, one fragment will have a recycler view to show the all the data in a table forma, the other fragment will show in graph form the evolution of the times of the sprinter and will include a filter feature.
 
