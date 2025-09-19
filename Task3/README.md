@@ -36,7 +36,11 @@ As this is a learning project, I chose to structure my approach using the **Agil
 
 ## 4. Progression
 
-- **Sprint1** Managed to get data from the esp32 server still not updating UI (delayed by 2 days on the expected timeframe mainly due to learning process).
+- **Sprint1** 
+
+Commit [522aaba](https://github.com/FIRMach16/Laser-Gates-project/commit/522aabaf8479d2bff61edae24ca2eef53074db42):
+
+Managed to get data from the esp32 server however this is just is printed out on Logcat and is not updating the UI.(delayed by 2 days on the expected timeframe mainly due to learning process).
 
 Problems to fix : 
 1. App don't connect automatically to the ESP32 network (Right now I need to connect manually).
@@ -44,10 +48,28 @@ Problems to fix :
 3. Multipe @Serialisable data classes may not be the correct way to go for data acquisition.
 
 **Demo on physical emulator using the logging utility:**
-![alt text](image.png)
+![](docs/image.png)
 
 
-- **Sprint2** (In Progress):
+- **Sprint2**:
 
-This will include managing a database to save data and another activity that will be connected to two fragments, the activity will show the latest performance of the sprinter and also his PB (Personal Best) in avreage speed and instatnous speed, one fragment will have a recycler view to show the all the data in a table forma, the other fragment will show in graph form the evolution of the times of the sprinter and will include a filter feature.
+For now, I made another empty activity to have this ui :
+
+Live Data UI (Entry point for now) | Progression UI
+:---------------------------------:|:----------------------:
+<img src="docs/liveDataUI.jpg" width="200"/> |   <img src="docs/progressionUI.jpg" width="200"/>
+
+ And also managed to create a database (using the singelton design pattern) and got to save some test data in that database (The data is showcased for now in the logs).
+ 
+![watch demo video](docs/DB_WorkingDemo.mp4)
+
+Problems to fix/ features that need to be developed:
+1. Progression UI will show a summary of the best and latest stat of the sprinter and 2 buttons leading to other fragments.
+2. One fragment will have a recycler view to show the all the data in a table format 
+3. The other fragment will show in graph form the evolution of the times of the sprinter and will include a filter feature (for example filter by distance ,weight , ..etc).
+4. A feature that allows entry deletion will also be useful.
+
+
+ 
+
 
