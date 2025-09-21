@@ -15,4 +15,12 @@ class SprintRepository(private  val sprintDao : SprintDao){
         sprintDao.addSprint(sprint)
     }
 
+    suspend fun clearAllSprints(){
+        sprintDao.ClearSprints()
+    }
+
+
+
+
+
 }

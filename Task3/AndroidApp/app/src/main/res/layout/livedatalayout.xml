@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="50dp"
-        android:text="Time"
+        android:text="@string/time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,17 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="50dp"
-        android:text="EntrySpeed"
+        android:text="@string/entrySpeed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TimeDifferenceLabel" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/ExitSpeedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="50dp"
-        android:text="ExitSpeed"
+        android:text="@string/exitSpeed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EntrySpeedLabel" />
 
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:text="__.__ s"
+        android:text="@string/defaultRes"
         app:layout_constraintBottom_toBottomOf="@+id/TimeDifferenceLabel"
         app:layout_constraintStart_toEndOf="@+id/TimeDifferenceLabel"
         app:layout_constraintTop_toTopOf="@+id/TimeDifferenceLabel" />
@@ -50,7 +50,7 @@
         android:id="@+id/EntrySpeedResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="__.__ Km/h"
+        android:text="@string/defaultRes"
         app:layout_constraintBottom_toBottomOf="@+id/EntrySpeedLabel"
         app:layout_constraintStart_toStartOf="@+id/TimeDifferenceResult"
         app:layout_constraintTop_toTopOf="@+id/EntrySpeedLabel" />
@@ -59,10 +59,12 @@
         android:id="@+id/ExitSpeedResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="__.__ Km/h"
-        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        android:text="@string/defaultRes"
+        app:layout_constraintBottom_toBottomOf="@+id/ExitSpeedLabel"
         app:layout_constraintStart_toStartOf="@+id/EntrySpeedResult"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="@+id/ExitSpeedLabel"
+
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/switchToProgressionBtn"
@@ -70,10 +72,145 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:onClick="OnClickOfSwitchToProgression"
-        android:text="Progression"
+        android:text="@string/progressionBtnText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:clickable="true"
+        android:contentDescription="@string/addBtnDescription"
+        android:rotationX="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:srcCompat="@drawable/ic_add" />
+
+    <TextView
+        android:id="@+id/TimeDiffrenceUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/timeUnit"
+        app:layout_constraintBottom_toBottomOf="@+id/TimeDifferenceResult"
+        app:layout_constraintStart_toEndOf="@+id/TimeDifferenceResult"
+        app:layout_constraintTop_toTopOf="@+id/TimeDifferenceResult" />
+
+    <TextView
+        android:id="@+id/EntrySpeedUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/speedUnit"
+        app:layout_constraintBottom_toBottomOf="@+id/EntrySpeedResult"
+        app:layout_constraintStart_toEndOf="@+id/EntrySpeedResult"
+        app:layout_constraintTop_toTopOf="@+id/EntrySpeedResult" />
+
+    <TextView
+        android:id="@+id/ExitSpeedUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/speedUnit"
+        app:layout_constraintBottom_toBottomOf="@+id/ExitSpeedResult"
+        app:layout_constraintStart_toEndOf="@+id/ExitSpeedResult"
+        app:layout_constraintTop_toTopOf="@+id/ExitSpeedResult" />
+
+    <TextView
+        android:id="@+id/DistanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/distanceBetweenGates"
+        app:layout_constraintStart_toStartOf="@+id/ExitSpeedLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ExitSpeedLabel" />
+
+    <TextView
+        android:id="@+id/BuildUpDistanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/buildUpDistance"
+        app:layout_constraintStart_toStartOf="@+id/DistanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/DistanceLabel" />
+
+    <EditText
+        android:id="@+id/DistanceEntryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:hint="@string/distanceBetweenGates"
+        android:inputType="number"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/DistanceLabel"
+        app:layout_constraintStart_toStartOf="@+id/ExitSpeedResult"
+        app:layout_constraintTop_toTopOf="@+id/DistanceLabel" />
+    <EditText
+        android:id="@+id/BuildUpDistanceEntryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="7"
+        android:hint="@string/buildUpDistance"
+        android:textSize="14sp"
+        android:inputType="number"
+        app:layout_constraintTop_toTopOf="@+id/BuildUpDistanceLabel"
+        app:layout_constraintBottom_toBottomOf="@+id/BuildUpDistanceLabel"
+        app:layout_constraintStart_toStartOf="@+id/DistanceEntryText"/>
+
+
+    <TextView
+        android:id="@+id/DistanceUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/distanceUnit"
+        app:layout_constraintStart_toEndOf="@+id/DistanceEntryText"
+        app:layout_constraintTop_toTopOf="@+id/DistanceEntryText"
+        app:layout_constraintBottom_toBottomOf="@+id/DistanceEntryText"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/BuildUpDistanceUnit"
+        android:layout_marginStart="2dp"
+        android:text="@string/distanceUnit"
+        app:layout_constraintStart_toEndOf="@+id/BuildUpDistanceEntryText"
+        app:layout_constraintTop_toTopOf="@+id/BuildUpDistanceEntryText"
+        app:layout_constraintBottom_toBottomOf="@+id/BuildUpDistanceEntryText"/>
+
+    <TextView
+        android:id="@+id/WeightedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/Weighted"
+        app:layout_constraintStart_toStartOf="@+id/BuildUpDistanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/BuildUpDistanceLabel" />
+
+    <CheckBox
+        android:id="@+id/WeightedAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/WeightedLabel"
+        app:layout_constraintStart_toEndOf="@+id/WeightedLabel"
+        app:layout_constraintTop_toTopOf="@+id/WeightedLabel" />
+
+    <EditText
+        android:id="@+id/WeightAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ems="4"
+        android:inputType="number"
+        android:hint="@string/weightAmount"
+        app:layout_constraintBottom_toBottomOf="@+id/WeightedLabel"
+        app:layout_constraintStart_toEndOf="@+id/WeightedAnswer"
+        app:layout_constraintTop_toTopOf="@+id/WeightedLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,8 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.view.View
+import android.widget.CheckBox
+import android.widget.EditText
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.speedray.data.Sprint
@@ -25,10 +27,12 @@ import com.example.speedray.data.SprintRepository
 import com.example.speedray.data.SprintViewModel
 import kotlinx.coroutines.launch
 
+
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.Calendar
 import java.util.Date
+import java.util.Random
 
 
 const val TAG = "SpeedRay"
@@ -84,35 +88,48 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG,"Could not connect to ESP32_WIFI")
             }
         }
+
         Log.d(TAG,"Hello")
         connectivityManager.requestNetwork(networkRequest,networkCallback)
 
-        insertDummyDataToDatabase(this)
+        //  data from ui
+        val weightedCheckBox= findViewById<CheckBox>(R.id.WeightedAnswer)
+        val weightAmount= findViewById<EditText>(R.id.WeightAmount)
 
+        weightAmount.isEnabled = weightedCheckBox.isChecked
+
+        weightedCheckBox.setOnCheckedChangeListener { _,state
+        -> weightAmount.isEnabled = state
+        }
+        val distanceBetweenGates = findViewById<EditText>(R.id.DistanceEntryText)
+        val distanceOfBuildUp = findViewById<EditText>(R.id.BuildUpDistanceEntryText)
+
+        val random = Random()
+
+        val addFloatingButton: View = findViewById(R.id.floatingActionButton)
+        addFloatingButton.setOnClickListener { view ->
+
+            val weight = if(weightedCheckBox.isChecked) weightAmount.text.toString().toInt() else 0
+            val sprint = Sprint(1,random.nextFloat()*3,random.nextFloat()*4,random.nextFloat()*10,Date(),
+                distanceBetweenGates.text.toString().toInt(),distanceOfBuildUp.text.toString().toInt(),weightedCheckBox.isChecked,
+                weight)
+            insertDummyDataToDatabase(this, sprint = sprint)
+        }
 
 
 
     }
-    fun insertDummyDataToDatabase(owner: LifecycleOwner, context: Context = owner as Context){
+    fun insertDummyDataToDatabase(owner: LifecycleOwner, context: Context = owner as Context,sprint: Sprint){
         val sprintDao = SprintDatabase.getDatabase(context).sprintDao()
         DummySprintRepositry = SprintRepository(sprintDao)
 
+
 // Example dummy data
 
-            val Sprint4= Sprint(
-                id = 4,
-                time = 3.25f,
-                entrySpeed = 7.5f,
-                exitSpeed = 9.0f,
-                dateOfSprint = Calendar.getInstance().apply { set(2025, 9, 18) }.time,
-                distanceBetweenGates = 25,
-                distanceOfBuildUp = 12,
-                weighted = false,
-                weight = 0
-            )
-        lifecycleScope.launch {
 
-            DummySprintRepositry.addSprint(Sprint4)
+        lifecycleScope.launch {
+            DummySprintRepositry.clearAllSprints() // just for demo purposes
+            DummySprintRepositry.addSprint(sprint)
         }
         DummySprintRepositry.readAllData.observe(owner){
             sprints -> Log.d(TAG,"Db : $sprints")

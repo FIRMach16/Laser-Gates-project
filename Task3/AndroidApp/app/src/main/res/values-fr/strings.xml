@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpeedRay</string>
+    <string name="time">Temp</string>
+    <string name="entrySpeed">Vitesse d\'entrée</string>
+    <string name="exitSpeed">Vitesse de sortie</string>
+    <string name="progressionBtnText">Progression</string>
+    <string name="addBtnDescription">ajouter</string>
+    <string name="distanceBetweenGates">Distance</string>
+    <string name="buildUpDistance">Distance d\'élan</string>
+    <string name="Weighted">Avec poids?</string>
+    <string name="weightAmount">Poids</string>
+</resources>

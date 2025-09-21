@@ -50,6 +50,7 @@ Problems to fix :
 **Demo on physical emulator using the logging utility:**
 ![](docs/image.png)
 
+---
 
 - **Sprint2**:
 
@@ -73,6 +74,19 @@ Problems to fix/ features that need to be developed:
 2. One fragment will have a recycler view to show the all the data in a table format 
 3. The other fragment will show in graph form the evolution of the times of the sprinter and will include a filter feature (for example filter by distance ,weight , ..etc).
 4. A feature that allows entry deletion will also be useful.
+
+---
+
+- **Sprint3**
+
+In this sprint i added other Views in the main UI that allows me to input metrics suchs as (Distance between gates , build up distance and wether the sprinter is weighted or not) I also added a FAB (Floating action button) that clear the table (just for testing purposes) and add a sprint to the database with some metrics chosen randomly (time,entrySpeed & exitSpeed), some chosen deliberately (Date is the date of the button click) and the rest are chosen by the user. Click the image bellow to see the video demo:
+
+
+<div align="center" >
+<a href="https://vimeo.com/1120588722?share=copy">
+    <img src="docs/AddFun+Metrics.png" alt="Video Demonstration" width="600">
+</a>
+</div>
 
 
  

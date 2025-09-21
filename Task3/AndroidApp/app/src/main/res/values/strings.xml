@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">SpeedRay</string>
+    <string name="time">Time</string>
+    <string name="entrySpeed">EntrySpeed</string>
+    <string name="exitSpeed">ExitSpeed</string>
+    <string name="defaultRes" translatable="false">__.__</string>
+    <string name="progressionBtnText">Progression</string>
+    <string name="timeUnit" translatable="false">s</string>
+    <string name="speedUnit" translatable="false">Km/h</string>
+    <string name="distanceUnit" translatable="false">m</string>
+    <string name="addBtnDescription">add</string>
+    <string name="distanceBetweenGates">Distance</string>
+    <string name="buildUpDistance">BuildUpDistance</string>
+    <string name="Weighted">Weighted?</string>
+    <string name="weightAmount">Weight</string>
+
+
 </resources>
