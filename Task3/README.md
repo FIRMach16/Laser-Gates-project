@@ -72,6 +72,8 @@ Problems to fix :
 
 - **Sprint2**:
 
+Commit [38dd751](https://github.com/FIRMach16/Laser-Gates-project/commit/38dd751fd0f1cd3e7ac738c5234af2f2d578eb54)
+
 For now, I made another empty activity to have this ui :
 
 Live Data UI (Entry point for now) | Progression UI
@@ -96,6 +98,8 @@ Problems to fix/ features that need to be developed:
 ---
 
 - **Sprint3**
+
+Commit [71d9214](https://github.com/FIRMach16/Laser-Gates-project/commit/71d921470f3a0635c264b6bf903742cba5b3f27f)
 
 In this sprint i added other Views in the main UI that allows me to input metrics suchs as (Distance between gates , build up distance and wether the sprinter is weighted or not) I also added a FAB (Floating action button) that clear the table (just for testing purposes) and add a sprint to the database with some metrics chosen randomly (time,entrySpeed & exitSpeed), some chosen deliberately (Date is the date of the button click) and the rest are chosen by the user. Click the image bellow to see the video demo:
 
