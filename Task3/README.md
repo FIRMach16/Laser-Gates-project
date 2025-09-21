@@ -20,6 +20,7 @@ As this is a learning project, I chose to structure my approach using the **Agil
 ### Developer
 - As the developer, I want to make the app optionally connectable to a cloud computing environment.  
   (This is not a core objective for this project, but it supports learning goals and future integration with other sensor systems.)  
+  (This can allow a user to sync data on diffrent devices or platforms)
 
 
 ## 2. Priorities
@@ -29,10 +30,27 @@ As this is a learning project, I chose to structure my approach using the **Agil
 
 
 ## 3. Sprint Plan
+
+Old plan : 
 - **Sprint 1**: Implement ESP32 and Android connection and display live metrics.  
 - **Sprint 2**: Add UI for history tracking and progression.  
 - **Sprint 3**: Add navigation between screens and input for distance.  
-- **Sprint 4**: Explore coach mode and optional cloud integration.  
+- **Sprint 4**: Explore coach mode and optional cloud integration.
+
+New Plan: (Changed after Sprint3)
+
+- **Sprint 1** Connect Android and ESP32 and get JSON data.
+- **Sprint 2** Create a Database that will save sprint data and create a new activity that will dispaly this data.
+- **Sprint 3** Add input for other metrics of a sprint and save data to the database
+- **Sprint 4** Fix connection issue (At sprint 1 the connection to the ESP32 needs to happen manually before starting the app so i can receive data).
+- **Sprint 5** Display the data received from the ESP32 on the UI.
+- **Sprint 6** Fill progression UI with summary of sprint data (best performance and latest).
+- **Sprint 7** Add a fragment that is hosted at progression UI that shows performances in a table format.
+- **Sprint 8** Add another fragment that is hosted at progression UI that displays plots of performances.
+- **Sprint 9** Add a filter features to the plot fragment.
+- **Sprint 10** Clean and improve UI.
+- **Sprint 11**: Explore coach mode and optional cloud integration.
+
 
 ## 4. Progression
 
