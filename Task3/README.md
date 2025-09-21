@@ -60,8 +60,13 @@ Live Data UI (Entry point for now) | Progression UI
 <img src="docs/liveDataUI.jpg" width="200"/> |   <img src="docs/progressionUI.jpg" width="200"/>
 
  And also managed to create a database (using the singelton design pattern) and got to save some test data in that database (The data is showcased for now in the logs).
- 
-![watch demo video](docs/DB_WorkingDemo.mp4)
+
+<div align="center" >
+<a href="https://vimeo.com/1120585126?share=copy">
+    <img src="docs/DbDemo.png" alt="Video Demonstration" width="600">
+</a>
+</div>
+
 
 Problems to fix/ features that need to be developed:
 1. Progression UI will show a summary of the best and latest stat of the sprinter and 2 buttons leading to other fragments.
