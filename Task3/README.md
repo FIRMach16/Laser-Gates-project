@@ -114,9 +114,11 @@ In this sprint i added other Views in the main UI that allows me to input metric
  
 - **Sprint4**
 
+Commit [2c8e504](https://github.com/FIRMach16/Laser-Gates-project/commit/2c8e50424f5622893f051a0fb58c7ef2f205b3d3)
+
 From this point i decided that i won't use AI nor stackoverflow for programmig, just official documentation to complete this app, this will deepen my understanding of software engineering in general.
 
-In this sprint i fixed the connection issue, so that when the app request the network if that network is available it connects (By just adding the BSSID (MAC Adress)) , i also added a button that sends this connection request (ImageButtton at the bottom left) and an indicator (ImageView at top right corner) that change it's source image to indicate if the app is connected to the ESP32 network or not.
+In this sprint i fixed the connection issue, so that when the app request the network if the requested network is available it connects to it (By just adding the BSSID (MAC Adress)) , i also added a button that sends this connection request (ImageButtton at the bottom left) and an indicator (ImageView at top right corner) that change it's source image to indicate if the app is connected to the ESP32 network or not.
 
 This video will demonstrate these changes (the icon at the left belongs to the screen recorder app that i used):
 
