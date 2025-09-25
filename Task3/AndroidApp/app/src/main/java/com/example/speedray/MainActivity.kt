@@ -2,6 +2,7 @@ package com.example.speedray
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 
 import android.util.Log
@@ -13,24 +14,26 @@ import android.net.wifi.WifiNetworkSpecifier
 import android.net.wifi.WifiManager
 
 import android.net.ConnectivityManager
+import android.net.MacAddress
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.speedray.data.Sprint
 import com.example.speedray.data.SprintDatabase
 import com.example.speedray.data.SprintRepository
-import com.example.speedray.data.SprintViewModel
 import kotlinx.coroutines.launch
 
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.util.Calendar
 import java.util.Date
 import java.util.Random
 
@@ -47,6 +50,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.livedatalayout)
 
+        val notConnectedDrawable = ResourcesCompat.getDrawable(resources,R.drawable.ic_not_connected,null)
+        val connectedDrawable = ResourcesCompat.getDrawable(resources,R.drawable.ic_connected,null)
+        val connectImageStatus = findViewById<ImageView>(R.id.ConnectionStatus)
+        val connectToEspButton = findViewById<ImageButton>(R.id.ConnectToEspButton)
+
+
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
         Log.d(TAG,"Can have 2 WIFIs : ${wifiManager.isStaConcurrencyForLocalOnlyConnectionsSupported}")
@@ -55,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val wns = WifiNetworkSpecifier.Builder()
             .setSsid("Laser_Gate_Connect")
+            .setBssid(MacAddress.fromString("20:20:20:20:20:20"))
             .setWpa2Passphrase("Firas1235")
             .build()
         val networkRequest = NetworkRequest.Builder()
@@ -63,18 +73,20 @@ class MainActivity : AppCompatActivity() {
             .setNetworkSpecifier(wns)
             .build()
         val networkCallback = object : ConnectivityManager.NetworkCallback(){
-            // WILL ADD INDICATOR IN UI IN SPRINT2
+
             override fun onLost(network: Network) {
                 super.onLost(network)
+                connectImageStatus.setImageDrawable(notConnectedDrawable)
+                connectToEspButton.isClickable = true
                 Log.d(TAG,"Lost connection to ESP32_WIFI")
-
             }
 
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
+                connectImageStatus.setImageDrawable(connectedDrawable)
+                connectToEspButton.isClickable = false
                 Log.d(TAG,"Connected to ESP32_WIFI")
                 connectivityManager.bindProcessToNetwork(network)
-
                 val client = OkHttpClient()
                 val request = Request.Builder()
                     .url("ws://192.168.4.1/ws")
@@ -85,12 +97,20 @@ class MainActivity : AppCompatActivity() {
 
             override fun onUnavailable() {
                 super.onUnavailable()
+                connectImageStatus.setImageDrawable(notConnectedDrawable)
                 Log.d(TAG,"Could not connect to ESP32_WIFI")
+
+
             }
+
+
         }
 
-        Log.d(TAG,"Hello")
-        connectivityManager.requestNetwork(networkRequest,networkCallback)
+        connectToEspButton.setOnClickListener{
+            connectivityManager.requestNetwork(networkRequest,networkCallback)
+        }
+
+
 
         //  data from ui
         val weightedCheckBox= findViewById<CheckBox>(R.id.WeightedAnswer)
@@ -108,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
         val addFloatingButton: View = findViewById(R.id.floatingActionButton)
         addFloatingButton.setOnClickListener { view ->
-
+            connectImageStatus.setImageDrawable(notConnectedDrawable)
             val weight = if(weightedCheckBox.isChecked) weightAmount.text.toString().toInt() else 0
             val sprint = Sprint(1,random.nextFloat()*3,random.nextFloat()*4,random.nextFloat()*10,Date(),
                 distanceBetweenGates.text.toString().toInt(),distanceOfBuildUp.text.toString().toInt(),weightedCheckBox.isChecked,

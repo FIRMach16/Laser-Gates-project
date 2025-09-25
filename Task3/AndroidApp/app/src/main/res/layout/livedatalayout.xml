@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -82,10 +83,10 @@
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="24dp"
         android:clickable="true"
         android:contentDescription="@string/addBtnDescription"
-        android:rotationX="1"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -151,17 +152,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/DistanceLabel"
         app:layout_constraintStart_toStartOf="@+id/ExitSpeedResult"
         app:layout_constraintTop_toTopOf="@+id/DistanceLabel" />
+
     <EditText
         android:id="@+id/BuildUpDistanceEntryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="7"
         android:hint="@string/buildUpDistance"
-        android:textSize="14sp"
         android:inputType="number"
-        app:layout_constraintTop_toTopOf="@+id/BuildUpDistanceLabel"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/BuildUpDistanceLabel"
-        app:layout_constraintStart_toStartOf="@+id/DistanceEntryText"/>
+        app:layout_constraintStart_toStartOf="@+id/DistanceEntryText"
+        app:layout_constraintTop_toTopOf="@+id/BuildUpDistanceLabel" />
 
 
     <TextView
@@ -170,18 +172,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:text="@string/distanceUnit"
+        app:layout_constraintBottom_toBottomOf="@+id/DistanceEntryText"
         app:layout_constraintStart_toEndOf="@+id/DistanceEntryText"
-        app:layout_constraintTop_toTopOf="@+id/DistanceEntryText"
-        app:layout_constraintBottom_toBottomOf="@+id/DistanceEntryText"/>
+        app:layout_constraintTop_toTopOf="@+id/DistanceEntryText" />
+
     <TextView
+        android:id="@+id/BuildUpDistanceUnit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/BuildUpDistanceUnit"
         android:layout_marginStart="2dp"
         android:text="@string/distanceUnit"
+        app:layout_constraintBottom_toBottomOf="@+id/BuildUpDistanceEntryText"
         app:layout_constraintStart_toEndOf="@+id/BuildUpDistanceEntryText"
-        app:layout_constraintTop_toTopOf="@+id/BuildUpDistanceEntryText"
-        app:layout_constraintBottom_toBottomOf="@+id/BuildUpDistanceEntryText"/>
+        app:layout_constraintTop_toTopOf="@+id/BuildUpDistanceEntryText" />
 
     <TextView
         android:id="@+id/WeightedLabel"
@@ -207,10 +210,32 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:ems="4"
-        android:inputType="number"
         android:hint="@string/weightAmount"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@+id/WeightedLabel"
         app:layout_constraintStart_toEndOf="@+id/WeightedAnswer"
         app:layout_constraintTop_toTopOf="@+id/WeightedLabel" />
+
+    <ImageView
+        android:id="@+id/ConnectionStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_not_connected" />
+
+    <ImageButton
+        android:id="@+id/ConnectToEspButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:layout_marginStart="24dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButton"
+        app:srcCompat="@drawable/ic_connect_to_esp32" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

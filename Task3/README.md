@@ -66,7 +66,7 @@ Problems to fix :
 3. Multipe @Serialisable data classes may not be the correct way to go for data acquisition.
 
 **Demo on physical emulator using the logging utility:**
-![](docs/image.png)
+![](docs/ConnectionWorking.png)
 
 ---
 
@@ -112,5 +112,19 @@ In this sprint i added other Views in the main UI that allows me to input metric
 
 
  
+- **Sprint4**
+
+From this point i decided that i won't use AI nor stackoverflow for programmig, just official documentation to complete this app, this will deepen my understanding of software engineering in general.
+
+In this sprint i fixed the connection issue, so that when the app request the network if that network is available it connects (By just adding the BSSID (MAC Adress)) , i also added a button that sends this connection request (ImageButtton at the bottom left) and an indicator (ImageView at top right corner) that change it's source image to indicate if the app is connected to the ESP32 network or not.
+
+This video will demonstrate these changes (the icon at the left belongs to the screen recorder app that i used):
+
+<div align="center" >
+<a href="https://vimeo.com/1121853232?share=copy">
+    <img src="docs/ConnectionDemoImage.png" alt="Video Demonstration" width="200">
+</a>
+</div>
+
 
 
