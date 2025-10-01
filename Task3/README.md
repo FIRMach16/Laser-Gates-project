@@ -128,5 +128,11 @@ This video will demonstrate these changes (the icon at the left belongs to the s
 </a>
 </div>
 
+- **Sprint 5**
 
+In this sprint i used the livedata class to post the data to the main thread (in this case MainActivity) to update the ui and show in real time the data received from the esp32, this sprint took time because i  tried to implement the observer design pattern from scratch, however  I didn't find a way to subscribe mainActivity to the observer list beacause the observer need acces to the observable (in this case the esp32websocket) and i can't initialise mainactivity inside itself , and at the end i setteled for a livedata object that contain the data i need to update the UI i used *postValue()* because it can post data asynchronously.
+
+I also replaced the parameters of the Sprint instance that is uploaded to DataBase with the corresponding text values converted to float.
+
+This sprint made me realise that my code is not very clean and also that i still have many edge cases to consider (like preventing the user from adding a Sprint to the database if the ui is still updating or if he forgot to input the distances)
 
