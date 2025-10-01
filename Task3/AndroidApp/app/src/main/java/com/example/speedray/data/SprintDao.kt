@@ -14,7 +14,7 @@ interface SprintDao {
     suspend fun addSprint(sprint: Sprint)
 
     @Query("DELETE FROM sprints_table")
-    suspend fun ClearSprints()
+    suspend fun clearSprints()
 
     @Query("SELECT * FROM sprints_table ORDER BY dateOfSprint DESC" )
     fun readAllData(): LiveData<List<Sprint>>

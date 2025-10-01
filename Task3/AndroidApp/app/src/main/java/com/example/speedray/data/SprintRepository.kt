@@ -16,7 +16,7 @@ class SprintRepository(private  val sprintDao : SprintDao){
     }
 
     suspend fun clearAllSprints(){
-        sprintDao.ClearSprints()
+        sprintDao.clearSprints()
     }
 
 
