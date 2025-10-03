@@ -1,7 +1,7 @@
 # Laser Gate Android App
 
 ## Objective
-The goal of this project is to develop an Android application that stores and displays metrics sent by the laser gates.
+The goal of this task is to develop an Android application that stores and displays metrics sent by the laser gates.
 
 As this is a learning project, I chose to structure my approach using the **Agile methodology**. This not only aligns with modern development practices but also increases the chances of finishing the app within a reasonable timeframe.
 
@@ -105,7 +105,7 @@ In this sprint i added other Views in the main UI that allows me to input metric
 
 
 <div align="center" >
-<a href="https://vimeo.com/1120588722?share=copy">
+<a href="https://vimeo.com/1120585126">
     <img src="docs/AddFun+Metrics.png" alt="Video Demonstration" width="600">
 </a>
 </div>
@@ -123,7 +123,7 @@ In this sprint i fixed the connection issue, so that when the app request the ne
 This video will demonstrate these changes (the icon at the left belongs to the screen recorder app that i used):
 
 <div align="center" >
-<a href="https://vimeo.com/1121853232?share=copy">
+<a href="https://vimeo.com/1120588722">
     <img src="docs/ConnectionDemoImage.png" alt="Video Demonstration" width="200">
 </a>
 </div>
