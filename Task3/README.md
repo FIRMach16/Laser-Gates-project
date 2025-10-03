@@ -82,6 +82,7 @@ Live Data UI (Entry point for now) | Progression UI
 
  And also managed to create a database (using the singelton design pattern) and got to save some test data in that database (The data is showcased for now in the logs).
 
+See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/1)
 
 Problems to fix/ features that need to be developed:
 1. Progression UI will show a summary of the best and latest stat of the sprinter and 2 buttons leading to other fragments.
@@ -97,6 +98,8 @@ Commit [71d9214](https://github.com/FIRMach16/Laser-Gates-project/commit/71d9214
 
 In this sprint i added other Views in the main UI that allows me to input metrics suchs as (Distance between gates , build up distance and wether the sprinter is weighted or not) I also added a FAB (Floating action button) that clear the table (just for testing purposes) and add a sprint to the database with some metrics chosen randomly (time,entrySpeed & exitSpeed), some chosen deliberately (Date is the date of the button click) and the rest are chosen by the user. 
 
+See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/2)
+
  
 - **Sprint4**
 
@@ -105,6 +108,8 @@ Commit [2c8e504](https://github.com/FIRMach16/Laser-Gates-project/commit/2c8e504
 From this point i decided that i won't use AI nor stackoverflow for programmig, just official documentation to complete this app, this will deepen my understanding of software engineering in general.
 
 In this sprint i fixed the connection issue, so that when the app request the network if the requested network is available it connects to it (By just adding the BSSID (MAC Adress)) , i also added a button that sends this connection request (ImageButtton at the bottom left) and an indicator (ImageView at top right corner) that change it's source image to indicate if the app is connected to the ESP32 network or not.
+
+See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/3)
 
 
 
