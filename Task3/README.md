@@ -100,6 +100,7 @@ In this sprint i added other Views in the main UI that allows me to input metric
 
 See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/2)
 
+---
  
 - **Sprint4**
 
@@ -111,7 +112,7 @@ In this sprint i fixed the connection issue, so that when the app request the ne
 
 See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/3)
 
-
+---
 
 - **Sprint 5**
 
