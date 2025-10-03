@@ -82,7 +82,7 @@ Live Data UI (Entry point for now) | Progression UI
 
  And also managed to create a database (using the singelton design pattern) and got to save some test data in that database (The data is showcased for now in the logs).
 
-See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/1)
+See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/1)
 
 Problems to fix/ features that need to be developed:
 1. Progression UI will show a summary of the best and latest stat of the sprinter and 2 buttons leading to other fragments.
@@ -98,7 +98,7 @@ Commit [71d9214](https://github.com/FIRMach16/Laser-Gates-project/commit/71d9214
 
 In this sprint i added other Views in the main UI that allows me to input metrics suchs as (Distance between gates , build up distance and wether the sprinter is weighted or not) I also added a FAB (Floating action button) that clear the table (just for testing purposes) and add a sprint to the database with some metrics chosen randomly (time,entrySpeed & exitSpeed), some chosen deliberately (Date is the date of the button click) and the rest are chosen by the user. 
 
-See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/2)
+See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/2)
 
  
 - **Sprint4**
@@ -109,7 +109,7 @@ From this point i decided that i won't use AI nor stackoverflow for programmig, 
 
 In this sprint i fixed the connection issue, so that when the app request the network if the requested network is available it connects to it (By just adding the BSSID (MAC Adress)) , i also added a button that sends this connection request (ImageButtton at the bottom left) and an indicator (ImageView at top right corner) that change it's source image to indicate if the app is connected to the ESP32 network or not.
 
-See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/3)
+See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/3)
 
 
 
@@ -118,6 +118,8 @@ See demo video [here](https://github.com/FIRMach16/Laser-Gates-project/issues/3)
 In this sprint i used the livedata class to post the data to the main thread (in this case MainActivity) to update the ui and show in real time the data received from the esp32, this sprint took time because i  tried to implement the observer design pattern from scratch, however  I didn't find a way to subscribe mainActivity to the observer list beacause the observer need acces to the observable (in this case the esp32websocket) and i can't initialise mainactivity inside itself , and at the end i setteled for a livedata object that contain the data i need to update the UI i used *postValue()* because it can post data asynchronously.
 
 I also replaced the parameters of the Sprint instance that is uploaded to DataBase with the corresponding text values converted to float.
+
+See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/4)
 
 This sprint made me realise that my code is not very clean and also that i still have many edge cases to consider (like preventing the user from adding a Sprint to the database if the ui is still updating or if he forgot to input the distances)
 
