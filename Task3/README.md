@@ -82,12 +82,6 @@ Live Data UI (Entry point for now) | Progression UI
 
  And also managed to create a database (using the singelton design pattern) and got to save some test data in that database (The data is showcased for now in the logs).
 
-<div align="center" >
-<a href="https://vimeo.com/1120585126?share=copy">
-    <img src="docs/DbDemo.png" alt="Video Demonstration" width="600">
-</a>
-</div>
-
 
 Problems to fix/ features that need to be developed:
 1. Progression UI will show a summary of the best and latest stat of the sprinter and 2 buttons leading to other fragments.
@@ -101,15 +95,7 @@ Problems to fix/ features that need to be developed:
 
 Commit [71d9214](https://github.com/FIRMach16/Laser-Gates-project/commit/71d921470f3a0635c264b6bf903742cba5b3f27f)
 
-In this sprint i added other Views in the main UI that allows me to input metrics suchs as (Distance between gates , build up distance and wether the sprinter is weighted or not) I also added a FAB (Floating action button) that clear the table (just for testing purposes) and add a sprint to the database with some metrics chosen randomly (time,entrySpeed & exitSpeed), some chosen deliberately (Date is the date of the button click) and the rest are chosen by the user. Click the image bellow to see the video demo:
-
-
-<div align="center" >
-<a href="https://vimeo.com/1120585126">
-    <img src="docs/AddFun+Metrics.png" alt="Video Demonstration" width="600">
-</a>
-</div>
-
+In this sprint i added other Views in the main UI that allows me to input metrics suchs as (Distance between gates , build up distance and wether the sprinter is weighted or not) I also added a FAB (Floating action button) that clear the table (just for testing purposes) and add a sprint to the database with some metrics chosen randomly (time,entrySpeed & exitSpeed), some chosen deliberately (Date is the date of the button click) and the rest are chosen by the user. 
 
  
 - **Sprint4**
@@ -120,13 +106,7 @@ From this point i decided that i won't use AI nor stackoverflow for programmig, 
 
 In this sprint i fixed the connection issue, so that when the app request the network if the requested network is available it connects to it (By just adding the BSSID (MAC Adress)) , i also added a button that sends this connection request (ImageButtton at the bottom left) and an indicator (ImageView at top right corner) that change it's source image to indicate if the app is connected to the ESP32 network or not.
 
-This video will demonstrate these changes (the icon at the left belongs to the screen recorder app that i used):
 
-<div align="center" >
-<a href="https://vimeo.com/1120588722">
-    <img src="docs/ConnectionDemoImage.png" alt="Video Demonstration" width="200">
-</a>
-</div>
 
 - **Sprint 5**
 
