@@ -190,6 +190,8 @@ class MainActivity : AppCompatActivity(){
     fun onClickOfSwitchToProgression(view: View?) {
         val intent = Intent(this, ProgressionActivity::class.java)
         startActivity(intent)
+        //TODO : replace deprecated overridePendingTransition(int,int) by  overrideActivityTransition(int, int, int)
+        // note : overrideActivityTransition needs API > 34 current min 31
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
