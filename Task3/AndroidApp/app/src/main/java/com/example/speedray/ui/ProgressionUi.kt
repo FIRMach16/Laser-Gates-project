@@ -26,9 +26,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.speedray.R
-import com.example.speedray.SprintPerfInfo
-import java.util.Date
+import com.example.speedray.data.ProgressionViewModel
+import com.example.speedray.data.SprintPerfInfo
+
 
 @Composable
 fun NavButtonContent(scale: ContentScale,
@@ -78,16 +80,17 @@ fun NavigationButtons(transition:()-> Unit,
 }
 @Preview(showBackground = true)
 @Composable
-fun ProgressionActivityLayout(transition: () -> Unit = {print(1)}){
+fun ProgressionActivityLayout(transition: () -> Unit = {print(1)},
+                              progressionViewModel: ProgressionViewModel = viewModel()){
     Column(modifier = Modifier.fillMaxSize()
         , verticalArrangement = Arrangement.Center){
         Column(modifier= Modifier.fillMaxHeight(0.8f),
             verticalArrangement = Arrangement.Center) {
             MessageCard(
-                SprintPerfInfo("Best", 35.12f, Date(), 20, 2.05f)
+             progressionViewModel.bestPerf.value
             )
             MessageCard(
-                SprintPerfInfo("Latest", 25.71f, Date(), 20, 2.80f)
+                progressionViewModel.latestPerf.value
             )
         }
         NavigationButtons(transition = transition, liveDataActive = true, progressionActive = false)
@@ -104,7 +107,7 @@ fun ProgressionActivityLayout(transition: () -> Unit = {print(1)}){
 //}
 
 @Composable
-fun MessageCard(perf: SprintPerfInfo){
+fun MessageCard(perf: SprintPerfInfo?){
     val detailsSpacing = 20.dp
     val descriptionFontSize =  18.sp
     val avgSpeedFontSize = 24.sp
@@ -117,12 +120,12 @@ fun MessageCard(perf: SprintPerfInfo){
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    perf.description, fontSize = descriptionFontSize,
+                    perf?.description.toString(), fontSize = descriptionFontSize,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                Text(perf.avgSpeed.toString() + "Km/h", fontSize = avgSpeedFontSize)
+                Text(perf?.avgSpeed.toString() + "Km/h", fontSize = avgSpeedFontSize)
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
@@ -131,7 +134,7 @@ fun MessageCard(perf: SprintPerfInfo){
 
                     Text("Date", fontSize = detailsTitlesFontSize)
                     Text(
-                        DateFormat.getDateInstance().format(perf.dayOfPerf),
+                        DateFormat.getDateInstance().format(perf?.dayOfPerf),
                         fontSize = detailsValuesFontSize
                     )
                 }
@@ -139,13 +142,13 @@ fun MessageCard(perf: SprintPerfInfo){
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                     Text("Distance", fontSize = detailsTitlesFontSize)
-                    Text(perf.distance.toString() + "m", fontSize = detailsValuesFontSize)
+                    Text(perf?.distance.toString() + "m", fontSize = detailsValuesFontSize)
                 }
                 Spacer(modifier = Modifier.width(detailsSpacing))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                     Text("Time", fontSize = detailsTitlesFontSize)
-                    Text(perf.time.toString() + "s", fontSize = detailsValuesFontSize)
+                    Text(perf?.time.toString() + "s", fontSize = detailsValuesFontSize)
 
                 }
 

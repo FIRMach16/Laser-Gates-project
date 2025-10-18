@@ -6,21 +6,19 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.speedray.data.ProgressionViewModel
 
 import com.example.speedray.ui.ProgressionActivityLayout
 import java.util.Date
 
 
 class ProgressionActivity : ComponentActivity() {
+    val progressionViewModel = ProgressionViewModel(this.application)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_progression)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
+        progressionViewModel.onTopEndLoaded()
         setContent {
-            ProgressionActivityLayout({switchToLiveData()})
+            ProgressionActivityLayout({switchToLiveData()},progressionViewModel)
         }
     }
     fun switchToLiveData(){
@@ -30,10 +28,5 @@ class ProgressionActivity : ComponentActivity() {
 
     }
 }
-data class SprintPerfInfo(val description: String,
-                          val avgSpeed: Float,
-                          val dayOfPerf: Date,
-                          val distance: Int,
-                          val time: Float)
 
 

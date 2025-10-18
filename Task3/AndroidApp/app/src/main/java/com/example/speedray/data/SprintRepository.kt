@@ -11,6 +11,14 @@ class SprintRepository(private  val sprintDao : SprintDao){
 
     val readAllData : LiveData<List<Sprint>> = sprintDao.readAllData()
 
+    val getBestTopEnd : Sprint = sprintDao.getBestTopEnd()
+
+    val getLatestTopEnd: Sprint = sprintDao.getLatestTopEnd()
+
+    val getBestAcceleration: Sprint= sprintDao.getBestAcc()
+
+    val getLatestAcceleration : Sprint =sprintDao.getLatestAcc()
+
     suspend fun addSprint(sprint: Sprint){
         sprintDao.addSprint(sprint)
     }
