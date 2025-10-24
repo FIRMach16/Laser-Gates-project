@@ -10,14 +10,25 @@ import androidx.lifecycle.LiveData
 class SprintRepository(private  val sprintDao : SprintDao){
 
     val readAllData : LiveData<List<Sprint>> = sprintDao.readAllData()
+    val getAllSprints : List<Sprint> = sprintDao.getAllSprints()
 
-    val getBestTopEnd : Sprint = sprintDao.getBestTopEnd()
+    val getBestTopEnd by lazy {
+        sprintDao.getBestTopEnd()
+    }
 
-    val getLatestTopEnd: Sprint = sprintDao.getLatestTopEnd()
 
-    val getBestAcceleration: Sprint= sprintDao.getBestAcc()
+    val getLatestTopEnd by lazy {
+        sprintDao.getLatestTopEnd()
+    }
 
-    val getLatestAcceleration : Sprint =sprintDao.getLatestAcc()
+
+    val getBestAcceleration by lazy{
+        sprintDao.getBestAcc()
+    }
+
+    val getLatestAcceleration by lazy {
+        sprintDao.getLatestAcc()
+    }
 
     suspend fun addSprint(sprint: Sprint){
         sprintDao.addSprint(sprint)

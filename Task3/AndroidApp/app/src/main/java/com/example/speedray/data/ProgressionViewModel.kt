@@ -1,85 +1,167 @@
 package com.example.speedray.data
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.speedray.TAG
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Date
 
-data class SprintPerfInfo(val description: String,
-                          val avgSpeed: Float,
-                          val dayOfPerf: Date,
-                          val distance: Int,
-                          val time: Float)
+data class SprintPerfInfo(val id: Int? =null,
+                          val description: String? =null,
+                          val avgSpeed: Float? =null,
+                          val dayOfPerf: Date?=null,
+                          val distance: Int?=null,
+                           val time: Float?=null)
+
+// as i will be using StateFlow and it needs a non null initial value,I will
+// assign to it a SprintPerfInfo with null parameters ,I could add a loading
+// icon as long as dayOfPerf is null, in case of the DB interaction is slow (Spoiler: it's not).
 
 
-class ProgressionViewModel(application: Application): AndroidViewModel(application){
+class ProgressionViewModel(sprintDatabase: SprintDatabase): ViewModel(){
 
-    var latestPerf = MutableLiveData<SprintPerfInfo>()
-    var bestPerf = MutableLiveData<SprintPerfInfo>()
+    private var _latestPerf = MutableStateFlow(SprintPerfInfo())
+    private var _bestPerf = MutableStateFlow(SprintPerfInfo())
+
+    private var _topEndClickable = MutableStateFlow(false)
+    private var _accelerationClickable = MutableStateFlow(true)
+
+    var latestPerf = _latestPerf.asStateFlow()
+    var bestPerf = _bestPerf.asStateFlow()
+
+    var topEndClickable = _topEndClickable.asStateFlow()
+    var accelerationClickable = _accelerationClickable.asStateFlow()
+
+    // the practice above is used for protection as state flow is an Immutable object (read-only)
+
     private val repository: SprintRepository
+    lateinit var bestTopEnd : Sprint
+
+    lateinit var latestTopEnd: Sprint
+
+    lateinit var bestAcceleration : Sprint
+    lateinit var latestAcceleration : Sprint
     init {
-        val sprintDao = SprintDatabase.getDatabase(application).sprintDao()
+
+        val sprintDao = sprintDatabase.sprintDao()
         repository = SprintRepository(sprintDao)
+        // for testing ui
+
+        if(repository.getAllSprints.isEmpty()) {
+            val sprints = SprintDataGenerator.generateRandomSprints(5)
+            val accelerations = SprintDataGenerator.generateRandomSprints(5,true)
+           viewModelScope.launch(Dispatchers.IO) {
+
+                for (i in 0..<5) {
+                    // just for testing purposes the real data will be added by the FAB in the mainActivity
+                    repository.addSprint(sprints[i])
+                    repository.addSprint(accelerations[i])
+                }
+
+
+                onTopEndLoaded()
+            }
+        }
+        else{
+           onTopEndLoaded()
+        }
     }
-    private val bestTopEnd by lazy {
-        repository.getBestTopEnd
-    }
-
-    private val latestTopEnd by lazy{
-        repository.getLatestTopEnd
-    }
-
-    private val bestAcceleration by lazy{
-        repository.getBestAcceleration
-    }
-
-    private val latestAcceleration by lazy{
-        repository.getLatestAcceleration
-    }
 
 
-    fun onTopEndLoaded(){
 
 
-        val latestTopEndPerf = SprintPerfInfo(
-            description = "Latest",
-            latestTopEnd.distanceBetweenGates/latestTopEnd.time,
-            latestTopEnd.dateOfSprint,
-            latestTopEnd.distanceBetweenGates,
-            latestTopEnd.time
-        )
 
-        val bestTopEndPerf = SprintPerfInfo(
-            description = "Best",
-            bestTopEnd.distanceBetweenGates/bestTopEnd.time,
-            bestTopEnd.dateOfSprint,
-            bestTopEnd.distanceBetweenGates,
-            bestTopEnd.time
-        )
+    fun onTopEndLoaded() {
 
-        latestPerf.value = latestTopEndPerf
-        bestPerf.value = bestTopEndPerf
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+
+
+                latestTopEnd = repository.getBestTopEnd
+                bestTopEnd = repository.getBestAcceleration
+                val latestTopEndPerf = SprintPerfInfo(
+                    id = latestTopEnd.id,
+                    description = "Latest",
+                    (latestTopEnd.distanceBetweenGates / latestTopEnd.time) * 3.6f,
+                    latestTopEnd.dateOfSprint,
+                    latestTopEnd.distanceBetweenGates,
+                    latestTopEnd.time
+                )
+
+                val bestTopEndPerf = SprintPerfInfo(
+                    id = bestTopEnd.id,
+                    description = "Best",
+                    (bestTopEnd.distanceBetweenGates / bestTopEnd.time) * 3.6f,
+                    bestTopEnd.dateOfSprint,
+                    bestTopEnd.distanceBetweenGates,
+                    bestTopEnd.time
+                )
+
+                _latestPerf.value = latestTopEndPerf
+                _bestPerf.value = bestTopEndPerf
+                _topEndClickable.value = false
+                _accelerationClickable.value = true
+            }
+            catch (t: Throwable){
+
+                    Log.d(TAG,"Caught throwable during onTopEndLoaded : $t")
+                    _latestPerf.value = SprintPerfInfo()
+                    _bestPerf.value = SprintPerfInfo()
+                    _topEndClickable.value = false
+                    _accelerationClickable.value = true
+
+            }
+        }
     }
     fun onAccelerationLoaded(){
 
-        val latestAccelerationPerf = SprintPerfInfo(
-            description = "Latest",
-            latestAcceleration.distanceBetweenGates/latestAcceleration.time,
-            latestAcceleration.dateOfSprint,
-            latestAcceleration.distanceBetweenGates,
-            latestAcceleration.time
-        )
 
-        val bestAccelerationPerf = SprintPerfInfo(
-            description = "Best",
-            bestAcceleration.distanceBetweenGates/bestAcceleration.time,
-            bestAcceleration.dateOfSprint,
-            bestAcceleration.distanceBetweenGates,
-            bestAcceleration.time
-        )
+        viewModelScope.launch(Dispatchers.IO){
+            try {
 
-        latestPerf.value = latestAccelerationPerf
-        bestPerf.value = bestAccelerationPerf
+
+                latestAcceleration = repository.getLatestAcceleration
+                bestAcceleration = repository.getLatestAcceleration
+
+                val latestAccelerationPerf = SprintPerfInfo(
+                    id = latestAcceleration.id,
+                    description = "Latest",
+                    (latestAcceleration.distanceBetweenGates / latestAcceleration.time) * 3.6f,
+                    latestAcceleration.dateOfSprint,
+                    latestAcceleration.distanceBetweenGates,
+                    latestAcceleration.time
+                )
+
+                val bestAccelerationPerf = SprintPerfInfo(
+                    id = bestAcceleration.id,
+                    description = "Best",
+                    (bestAcceleration.distanceBetweenGates / bestAcceleration.time) * 3.6f,
+                    bestAcceleration.dateOfSprint,
+                    bestAcceleration.distanceBetweenGates,
+                    bestAcceleration.time
+                )
+
+
+                _latestPerf.value = latestAccelerationPerf
+                _bestPerf.value = bestAccelerationPerf
+                _topEndClickable.value = true
+                _accelerationClickable.value = false
+            }
+            catch (t: Throwable){
+                Log.d(TAG,"Caught throwable during onAccelerationLoaded: $t")
+                _latestPerf.value = SprintPerfInfo()
+                _bestPerf.value = SprintPerfInfo()
+                _topEndClickable.value = true
+                _accelerationClickable.value = false
+
+            }
+        }
     }
 
 }

@@ -14,15 +14,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,16 +38,21 @@ import com.example.speedray.data.SprintPerfInfo
 
 
 @Composable
-fun NavButtonContent(scale: ContentScale,
-                     image: Painter,
-                     text: String,
-                     transition:()-> Unit,
-                     clickable: Boolean){
+fun NavButtonContent(
+    scale: ContentScale,
+    image: Painter,
+    text: String,
+    transition: () -> Unit,
+    clickable: Boolean
+) {
 
-    Card{
-        Column (modifier = Modifier.size(120.dp)
-            .clickable(enabled = clickable,onClick = transition),
-            horizontalAlignment = Alignment.CenterHorizontally,){
+    Card {
+        Column(
+            modifier = Modifier
+                .size(120.dp)
+                .clickable(enabled = clickable, onClick = transition),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
 
             Image(
                 modifier = Modifier.fillMaxSize(0.8f),
@@ -50,74 +60,190 @@ fun NavButtonContent(scale: ContentScale,
                 painter = image,
                 contentDescription = text
             )
-            Text(text=text)
+            Text(text = text)
 
-        }}
+        }
+    }
 }
+
 @Composable
-fun NavigationButtons(transition:()-> Unit,
-                      liveDataActive: Boolean,
-                      progressionActive: Boolean){
+fun NavigationButtons(
+    transition: () -> Unit,
+    liveDataActive: Boolean,
+    progressionActive: Boolean
+) {
 
 
     Row(
-        modifier = Modifier.fillMaxSize().padding(10.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Bottom
-    ){
-        NavButtonContent(ContentScale.FillBounds,
+    ) {
+        NavButtonContent(
+            ContentScale.FillBounds,
             painterResource(R.drawable.ic_timer),
             "Live Data",
-            transition,liveDataActive
+            transition, liveDataActive
         )
         Spacer(modifier = Modifier.width(50.dp))
-        NavButtonContent(ContentScale.FillBounds,
+        NavButtonContent(
+            ContentScale.FillBounds,
             painterResource(R.drawable.ic_progression),
-            "Progression",transition,progressionActive)
+            "Progression", transition, progressionActive
+        )
 
     }
 
 }
+@Composable
+fun ProgressionScreen(
+    transition: () -> Unit,
+    progressionViewModel: ProgressionViewModel = viewModel()
+
+){
+    val best by progressionViewModel.bestPerf.collectAsState()
+    val latest by progressionViewModel.latestPerf.collectAsState()
+
+    val topEndClickable by progressionViewModel.topEndClickable.collectAsState()
+    val accelerationClickable by progressionViewModel.accelerationClickable.collectAsState()
+
+    ProgressionActivityLayout(
+        transition,
+        { progressionViewModel.onAccelerationLoaded() },
+        {progressionViewModel.onTopEndLoaded()},
+        topEndClickable,
+        accelerationClickable,
+        best,
+        latest
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-fun ProgressionActivityLayout(transition: () -> Unit = {print(1)},
-                              progressionViewModel: ProgressionViewModel = viewModel()){
-    Column(modifier = Modifier.fillMaxSize()
-        , verticalArrangement = Arrangement.Center){
-        Column(modifier= Modifier.fillMaxHeight(0.8f),
-            verticalArrangement = Arrangement.Center) {
-            MessageCard(
-             progressionViewModel.bestPerf.value
-            )
-            MessageCard(
-                progressionViewModel.latestPerf.value
-            )
+fun ProgressionActivityLayout(
+    transitionToLiveDataActivity: () -> Unit = { print(1) },
+    loadAcceleration: () -> Unit= {print(1)},
+    loadTopEnd:()-> Unit = {print(1)},
+    topEndClickable: Boolean =true,
+    accelerationClickable: Boolean =true,
+    best: SprintPerfInfo = SprintPerfInfo(),
+    latest: SprintPerfInfo = SprintPerfInfo()
+
+    ) {
+
+    Column(
+        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
+    ) {
+        SelectorChoice(loadAcceleration,loadTopEnd,topEndClickable, accelerationClickable)
+        if (best == latest && best.dayOfPerf ==null){
+            Column(
+                modifier = Modifier.fillMaxHeight(0.6f).fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+            Text("No Data")}
         }
-        NavigationButtons(transition = transition, liveDataActive = true, progressionActive = false)
+        else if(best.id
+            ==latest.id) {
+
+            Column(
+                modifier = Modifier.fillMaxHeight(0.6f).fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+            Text("Your latest performance is your PB ;) Keep Going!",
+                modifier = Modifier.padding(30.dp),
+                textAlign = TextAlign.Center)
+            MessageCard(
+                best
+
+            )
+            }
+
+        }
+        else {
+
+            Column(
+                modifier = Modifier.fillMaxHeight(0.6f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                MessageCard(
+                    best
+                )
+                MessageCard(
+                    latest
+
+                )
+            }
+        }
+        NavigationButtons(transition = transitionToLiveDataActivity, liveDataActive = true, progressionActive = false)
     }
 
 }
 
-//@Composable
-//fun ProgressionNavButtons(){
-//    val context = LocalContext.current
-//    val transitionToLiveData = {
-//        val intent = Intent(context, MainActivity::class.java)
-//    }
-//}
+@Composable
+fun SelectorChoice(loadAcceleration:()-> Unit,
+                   loadTopEnd:()->Unit,
+                   topEndClickable: Boolean,
+                   accelerationClickable: Boolean){
+    val selectorFontSize = 15.sp
+    Row(modifier = Modifier
+        .fillMaxHeight(0.2f)
+        .fillMaxWidth(),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Surface (modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .clickable(topEndClickable, onClick = loadTopEnd),
+                shape = RoundedCornerShape(7.dp),
+                color = MaterialTheme.colorScheme.inversePrimary
+        )
+        {
+            Text(
+                "Top End",
+                fontSize = selectorFontSize,
+                textAlign = TextAlign.Center
+
+            )
+        }
+        Spacer(Modifier.fillMaxWidth(0.17f))
+
+        Surface (modifier = Modifier
+            .fillMaxWidth(0.53f)
+            .clickable(accelerationClickable, onClick = loadAcceleration),
+            shape = RoundedCornerShape(7.dp),
+            color = MaterialTheme.colorScheme.inversePrimary
+        ){
+        Text("Acceleration",
+            fontSize = selectorFontSize,
+            textAlign = TextAlign.Center,
+
+        )}
+    }
+}
+
 
 @Composable
-fun MessageCard(perf: SprintPerfInfo?){
+fun MessageCard(perf: SprintPerfInfo?) {
     val detailsSpacing = 20.dp
-    val descriptionFontSize =  18.sp
+    val descriptionFontSize = 18.sp
     val avgSpeedFontSize = 24.sp
     val detailsTitlesFontSize = 10.sp
     val detailsValuesFontSize = 12.sp
 
-    Card(shape = MaterialTheme.shapes.medium, modifier =
-        Modifier.padding(10.dp)
-            .fillMaxWidth()) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Card(
+        shape = MaterialTheme.shapes.medium, modifier =
+            Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     perf?.description.toString(), fontSize = descriptionFontSize,
@@ -125,7 +251,7 @@ fun MessageCard(perf: SprintPerfInfo?){
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                Text(perf?.avgSpeed.toString() + "Km/h", fontSize = avgSpeedFontSize)
+                Text("${"%.2f".format(perf?.avgSpeed)}Km/h", fontSize = avgSpeedFontSize)
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
@@ -133,8 +259,12 @@ fun MessageCard(perf: SprintPerfInfo?){
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                     Text("Date", fontSize = detailsTitlesFontSize)
-                    Text(
-                        DateFormat.getDateInstance().format(perf?.dayOfPerf),
+
+                    Text(text =
+                        if (perf?.dayOfPerf !=null)
+                         DateFormat.getDateInstance().format(perf.dayOfPerf)
+                        else
+                            "__.__.__",
                         fontSize = detailsValuesFontSize
                     )
                 }
@@ -148,7 +278,7 @@ fun MessageCard(perf: SprintPerfInfo?){
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                     Text("Time", fontSize = detailsTitlesFontSize)
-                    Text(perf?.time.toString() + "s", fontSize = detailsValuesFontSize)
+                    Text("${"%.2f".format(perf?.time)}s", fontSize = detailsValuesFontSize)
 
                 }
 
@@ -161,23 +291,3 @@ fun MessageCard(perf: SprintPerfInfo?){
 }
 
 
-
-//@Preview("Results Model", showBackground = true)
-//@Composable
-//fun PreviewMessageCard(){
-//    Column {
-//        MessageCard(
-//            SprintPerfInfo("Best", 35.12f, Date(), 20, 2.05f)
-//        )
-//        Spacer(modifier = Modifier.height(10.dp))
-//        MessageCard(
-//            SprintPerfInfo("Latest", 25.71f, Date(), 20, 2.80f)
-//        )
-//    }
-//}
-
-//@Preview("Buttons")
-//@Composable
-//fun PreviewButtons(){
-//    NavigationButtons({print("Hello")}, liveDataActive = true, progressionActive = false)
-//}

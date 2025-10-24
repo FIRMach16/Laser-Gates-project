@@ -4,22 +4,39 @@ package com.example.speedray
 import android.content.Intent
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.lifecycleScope
 import com.example.speedray.data.ProgressionViewModel
-
+import com.example.speedray.data.SprintDataGenerator
+import com.example.speedray.data.SprintDatabase
 import com.example.speedray.ui.ProgressionActivityLayout
-import java.util.Date
+import com.example.speedray.ui.ProgressionScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 
 class ProgressionActivity : ComponentActivity() {
-    val progressionViewModel = ProgressionViewModel(this.application)
+    private lateinit var progressionViewModel : ProgressionViewModel
+    private lateinit var sprintDatabase: SprintDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        progressionViewModel.onTopEndLoaded()
-        setContent {
-            ProgressionActivityLayout({switchToLiveData()},progressionViewModel)
+        sprintDatabase = SprintDatabase.getDatabase(this)
+        lifecycleScope.launch (Dispatchers.IO){
+               progressionViewModel = ProgressionViewModel(sprintDatabase)
         }
+
+        setContent {
+            ProgressionScreen({switchToLiveData()},progressionViewModel)
+        }
+
+
+
+
+
     }
     fun switchToLiveData(){
         val intent = Intent(this, MainActivity::class.java)
