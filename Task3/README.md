@@ -124,3 +124,21 @@ See demo video [here.](https://github.com/FIRMach16/Laser-Gates-project/issues/4
 
 This sprint made me realise that my code is not very clean and also that i still have many edge cases to consider (like preventing the user from adding a Sprint to the database if the ui is still updating or if he forgot to input the distances)
 
+---
+
+- **Sprint6** 
+
+- Created Unit Test for database interaction (JUNIT4)
+![](docs/SprintsDBTests.png)
+- Made modular and reusable UI with jetpack Compose (That should be cross-platform compatible?)
+- Populated the UI using stateFlow + viewModel (which a recommended practice to inrease app scalability and decrease the code coupling)
+
+You can check [here](github.com/FIRMach16/Laser-Gates-project/issues/5) for the video demo
+
+Points of improvement:
+- The UI could benefit from a redesign XD
+
+---
+
+
+
