@@ -1,4 +1,5 @@
 <resources>
+    <string name="DateOfSprint" translatable="false">Date</string>
     <string name="app_name">SpeedRay</string>
     <string name="time">Time</string>
     <string name="entrySpeed">EntrySpeed</string>
@@ -10,7 +11,7 @@
     <string name="distanceUnit" translatable="false">m</string>
     <string name="addBtnDescription">add</string>
     <string name="distanceBetweenGates">Distance</string>
-    <string name="buildUpDistance">BuildUpDistance</string>
+    <string name="buildUpDistance">Buildup Distance</string>
     <string name="Weighted">Weighted?</string>
     <string name="weightAmount">Weight</string>
 
