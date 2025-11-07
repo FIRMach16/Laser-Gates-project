@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.speedray.data.ProgressionViewModel
 import com.example.speedray.data.SprintDataGenerator
 import com.example.speedray.data.SprintDatabase
+import com.example.speedray.ui.MyProgressionNavHost
 import com.example.speedray.ui.ProgressionActivityLayout
 import com.example.speedray.ui.ProgressionScreen
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,8 @@ class ProgressionActivity : ComponentActivity() {
         }
 
         setContent {
-            ProgressionScreen({switchToLiveData()},progressionViewModel)
+//            ProgressionScreen({switchToLiveData()},progressionViewModel)
+            MyProgressionNavHost({switchToLiveData()},progressionViewModel)
         }
 
 

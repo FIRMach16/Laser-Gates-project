@@ -38,20 +38,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.speedray.R
 import com.example.speedray.data.Sprint
 import java.util.Date
 import java.util.logging.Filter
 
 @Composable
-fun SprintsScreen() {
+fun SprintsScreen(transitionToLiveData : ()-> Unit,
+                  navHostController: NavHostController) {
+
+    SprintsLayout(
+        toSummaryTransition = {navHostController.navigate("Summary")},
+        toPlotsTransition = {navHostController.navigate("SprintsPlots")}
+    )
 
 }
+@Preview(showBackground = true)
 @Composable
-fun SprintsLayout(){
-    // should a filtering bar with types of sprints and number of sprints to showcase
+fun SprintsLayout(
+    toSummaryTransition : ()-> Unit={},
+    toPlotsTransition : ()->Unit={}
+){
+    // should show a filtering bar with types of sprints and number of sprints to showcase
     // then a lazy column of sprints
-    Column() {
+    Column( verticalArrangement = Arrangement.Top) {
+        NavigationBar(
+            isSprintsClickable = false,
+            isSummaryClickable = true,
+            isPlotsClickable = true,
+            toPlotsTransition = {},
+            toSprintsTransition = toPlotsTransition,
+            toSummaryTransition = toSummaryTransition
+        )
         SprintsFilter()
         SprintsList()
     }
@@ -75,6 +95,20 @@ fun SprintsList(){
         item {
         SprintItem()
         }
+        item {
+            SprintItem()
+        }
+        item {
+            SprintItem()
+        }
+        item {
+            SprintItem()
+        }
+        item {
+            SprintItem()
+        }
+
+
     }
 }
 
@@ -88,7 +122,7 @@ fun SprintItem(sprint: Sprint = Sprint(
     distanceBetweenGates = 0, distanceOfBuildUp = 0,
     dateOfSprint = Date(), weight = 0, weighted = false
 )){
-    var itemState by remember { mutableStateOf(SprintItemHeight.EXPANDED) }
+    var itemState by remember { mutableStateOf(SprintItemHeight.NORMAL) }
     val transition = updateTransition(targetState = itemState)
 
     val boxHeight by transition.animateDp() {state ->
@@ -100,11 +134,11 @@ fun SprintItem(sprint: Sprint = Sprint(
 
     Card(
         modifier = Modifier.clickable(true, onClick = {
-            when(itemState){
+            itemState = when(itemState){
                 SprintItemHeight.NORMAL -> SprintItemHeight.EXPANDED
                 SprintItemHeight.EXPANDED -> SprintItemHeight.NORMAL
             }
-        })                  .height(boxHeight)
+        })  .height(boxHeight)
             .fillMaxWidth()
             .padding(5.dp)
 
@@ -187,7 +221,7 @@ fun NormalDescription(sprint: Sprint){
 }
 @Composable
 fun ExpandedDescription(sprint: Sprint){
-
+    val descriptionSize = 11.sp
     Row(modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
@@ -211,18 +245,18 @@ fun ExpandedDescription(sprint: Sprint){
                 Column(Modifier.weight(0.3f).fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
-                    Text(stringResource(R.string.DateOfSprint))
+                    Text(stringResource(R.string.DateOfSprint), fontSize = descriptionSize)
                     Text(
                         DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(sprint.dateOfSprint).toString(),
-                        textAlign = TextAlign.Center)
+                        textAlign = TextAlign.Center, fontSize = descriptionSize)
                 }
                 Spacer(modifier = Modifier.fillMaxWidth(0.05f))
 
                 Column(Modifier.weight(0.3f).fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
-                    Text(stringResource(R.string.distanceBetweenGates))
-                    Text(sprint.distanceBetweenGates.toString()+" m")
+                    Text(stringResource(R.string.distanceBetweenGates),fontSize = descriptionSize)
+                    Text(sprint.distanceBetweenGates.toString()+" m", fontSize = descriptionSize)
                 }
 
                 Spacer(modifier = Modifier.fillMaxWidth(0.05f))
@@ -230,8 +264,8 @@ fun ExpandedDescription(sprint: Sprint){
                 Column(Modifier.weight(0.3f).fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
-                    Text(stringResource(R.string.time))
-                    Text(sprint.time.toString()+" s")
+                    Text(stringResource(R.string.time), fontSize = descriptionSize)
+                    Text(sprint.time.toString()+" s", fontSize = descriptionSize)
                 }
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.1f))
@@ -244,8 +278,8 @@ fun ExpandedDescription(sprint: Sprint){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
 
-                    Text(stringResource(R.string.entrySpeed))
-                    Text(sprint.entrySpeed.toString()+" KM/H")
+                    Text(stringResource(R.string.entrySpeed), fontSize = descriptionSize)
+                    Text(sprint.entrySpeed.toString()+" KM/H", fontSize = descriptionSize)
 
                 }
                 Spacer(modifier = Modifier.fillMaxWidth(0.05f))
@@ -254,8 +288,8 @@ fun ExpandedDescription(sprint: Sprint){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
 
-                    Text(stringResource(R.string.exitSpeed))
-                    Text(sprint.exitSpeed.toString()+" KM/H")
+                    Text(stringResource(R.string.exitSpeed), fontSize = descriptionSize)
+                    Text(sprint.exitSpeed.toString()+" KM/H", fontSize = descriptionSize)
 
                 }
 
@@ -266,8 +300,8 @@ fun ExpandedDescription(sprint: Sprint){
                     verticalArrangement = Arrangement.Center) {
 
                     Text(stringResource(R.string.buildUpDistance),
-                        textAlign = TextAlign.Center)
-                    Text(sprint.distanceOfBuildUp.toString()+" m")
+                        textAlign = TextAlign.Center, fontSize = descriptionSize)
+                    Text(sprint.distanceOfBuildUp.toString()+" m", fontSize = descriptionSize)
 
                 }
             }
@@ -276,17 +310,17 @@ fun ExpandedDescription(sprint: Sprint){
 
                 Column(Modifier.weight(0.5f).fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Weighted?")
+                    Text("Weighted?", fontSize = descriptionSize)
                     Text(when(sprint.weighted){
                         true -> "Yes"
                         false -> "No"
-                    })
+                    }, fontSize = descriptionSize)
                 }
                 Spacer(modifier = Modifier.fillMaxWidth(0.03f))
                 Column(Modifier.weight(0.5f).fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(stringResource(R.string.weightAmount))
-                    Text(sprint.weight.toString()+" Kg")
+                    Text(stringResource(R.string.weightAmount), fontSize = descriptionSize)
+                    Text(sprint.weight.toString()+" Kg", fontSize = descriptionSize)
                 }
             }
         }

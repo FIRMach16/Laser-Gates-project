@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.speedray.R
 import com.example.speedray.data.ProgressionViewModel
 import com.example.speedray.data.SprintPerfInfo
@@ -76,7 +77,7 @@ fun NavigationButtons(
 
     Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(10.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Bottom
@@ -100,7 +101,8 @@ fun NavigationButtons(
 @Composable
 fun ProgressionScreen(
     transition: () -> Unit,
-    progressionViewModel: ProgressionViewModel = viewModel()
+    progressionViewModel: ProgressionViewModel = viewModel(),
+    navHostController: NavHostController
 
 ){
     val best by progressionViewModel.bestPerf.collectAsState()
@@ -110,36 +112,51 @@ fun ProgressionScreen(
     val accelerationClickable by progressionViewModel.accelerationClickable.collectAsState()
 
     ProgressionActivityLayout(
-        transition,
-        { progressionViewModel.onAccelerationLoaded() },
-        {progressionViewModel.onTopEndLoaded()},
-        topEndClickable,
-        accelerationClickable,
-        best,
-        latest
+
+        transitionToLiveDataActivity = transition,
+        loadAcceleration = { progressionViewModel.onAccelerationLoaded() },
+        loadTopEnd = {progressionViewModel.onTopEndLoaded()},
+        topEndClickable = topEndClickable,
+        accelerationClickable = accelerationClickable,
+        best = best,
+        latest = latest,
+        transitionToPlots =  { navHostController.navigate("SprintsPlots") },
+        transitionToList = {navHostController.navigate("SprintsList")}
+
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ProgressionActivityLayout(
-    transitionToLiveDataActivity: () -> Unit = { print(1) },
-    loadAcceleration: () -> Unit= {print(1)},
-    loadTopEnd:()-> Unit = {print(1)},
+    transitionToLiveDataActivity: () -> Unit = { },
+    loadAcceleration: () -> Unit= {},
+    loadTopEnd:()-> Unit = {} ,
     topEndClickable: Boolean =true,
     accelerationClickable: Boolean =true,
     best: SprintPerfInfo = SprintPerfInfo(),
-    latest: SprintPerfInfo = SprintPerfInfo()
-
+    latest: SprintPerfInfo = SprintPerfInfo(),
+    transitionToPlots : () -> Unit = {},
+    transitionToList : ()-> Unit = {}
     ) {
 
     Column(
-        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top
     ) {
+        NavigationBar(isSprintsClickable = true,
+            isSummaryClickable = false,
+            isPlotsClickable = true,
+            toSprintsTransition = transitionToList,
+            toSummaryTransition = {},
+            toPlotsTransition = transitionToPlots
+            )
+
         SelectorChoice(loadAcceleration,loadTopEnd,topEndClickable, accelerationClickable)
         if (best == latest && best.dayOfPerf ==null){
             Column(
-                modifier = Modifier.fillMaxHeight(0.6f).fillMaxWidth(),
+                modifier = Modifier
+
+                    .fillMaxWidth().weight(0.7f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -149,7 +166,9 @@ fun ProgressionActivityLayout(
             ==latest.id) {
 
             Column(
-                modifier = Modifier.fillMaxHeight(0.6f).fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxHeight(0.6f)
+                    .fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -190,14 +209,13 @@ fun SelectorChoice(loadAcceleration:()-> Unit,
                    accelerationClickable: Boolean){
     val selectorFontSize = 15.sp
     Row(modifier = Modifier
-        .fillMaxHeight(0.2f)
         .fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center
     ) {
         Surface (modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .clickable(topEndClickable, onClick = loadTopEnd),
+            .fillMaxWidth(0.3f)
+            .clickable(topEndClickable, onClick = loadTopEnd),
                 shape = RoundedCornerShape(7.dp),
                 color = MaterialTheme.colorScheme.inversePrimary
         )
