@@ -10,28 +10,56 @@ import androidx.lifecycle.LiveData
 class SprintRepository(private  val sprintDao : SprintDao){
 
     val readAllData : LiveData<List<Sprint>> = sprintDao.readAllData()
-    val getAllSprints : List<Sprint> = sprintDao.getAllSprints()
+    fun getAllSprints() : List<Sprint> {
+        return sprintDao.getAllSprints()
+    }
 
-    val getBestTopEnd by lazy {
-        sprintDao.getBestTopEnd()
+    fun getNSprints(numberOfSprints : Int) : List<Sprint> {
+       return sprintDao.showLimitedMixedData(numberOfSprints)
+    }
+
+    fun getNAccelerations(numberOfSprints : Int) : List<Sprint> {
+        return sprintDao.showLimitedAccelerationData(numberOfSprints)
+    }
+
+    fun getNTopEnds(numberOfSprints : Int) : List<Sprint> {
+        return sprintDao.showLimitedTopEndData(numberOfSprints)
+    }
+
+    fun getAccelerations(): List<Sprint>{
+        return sprintDao.getAccelerations()
     }
 
 
-    val getLatestTopEnd by lazy {
-        sprintDao.getLatestTopEnd()
+    fun getTopEnds():List<Sprint>{
+        return sprintDao.getTopEnds()
     }
 
 
-    val getBestAcceleration by lazy{
-        sprintDao.getBestAcc()
+    fun getBestTopEnd():Sprint {
+        return sprintDao.getBestTopEnd()
     }
 
-    val getLatestAcceleration by lazy {
-        sprintDao.getLatestAcc()
+
+    fun getLatestTopEnd():Sprint {
+        return sprintDao.getLatestTopEnd()
+    }
+
+
+    fun getBestAcceleration(): Sprint{
+        return sprintDao.getBestAcc()
+    }
+
+    fun getLatestAcceleration(): Sprint{
+        return sprintDao.getLatestAcc()
     }
 
     suspend fun addSprint(sprint: Sprint){
         sprintDao.addSprint(sprint)
+    }
+
+    suspend fun deleteSprint(sprint:Sprint){
+        sprintDao.deleteSprint(sprint)
     }
 
     suspend fun clearAllSprints(){

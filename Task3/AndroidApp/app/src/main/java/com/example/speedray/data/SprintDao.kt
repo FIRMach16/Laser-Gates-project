@@ -23,6 +23,15 @@ interface SprintDao {
     fun readAllData(): LiveData<List<Sprint>> //In this case i think LiveData is not very useful
     // because if i need an observer on the data i can do it in a view model
     // and also LiveData.value may not give the latest value on a background thread
+    @Query("SELECT * FROM sprints_table ORDER BY dateOfSprint DESC LIMIT :numberOfSprints")
+    fun showLimitedMixedData(numberOfSprints: Int): List<Sprint>
+
+    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp>0 ORDER BY dateOfSprint DESC LIMIT :numberOfSprints")
+    fun showLimitedTopEndData(numberOfSprints: Int) : List<Sprint>
+
+    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp=0 ORDER BY dateOfSprint DESC LIMIT :numberOfSprints")
+    fun showLimitedAccelerationData(numberOfSprints: Int) : List<Sprint>
+
 
     @Query("SELECT * FROM sprints_table ORDER BY dateOfSprint DESC")
     fun getAllSprints(): List<Sprint>
@@ -39,10 +48,11 @@ interface SprintDao {
     @Query("SELECT * FROM sprints_table  WHERE distanceOfBuildUp=0 ORDER BY dateOfSprint DESC LIMIT 1")
     fun getLatestAcc(): Sprint
 
-    // all of the below queries are for testing purposes
     @Query("SELECT dateOfSprint FROM sprints_table")
     fun getSprintDates():  List<Date>
 
-    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp = 0")
+    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp = 0 ORDER BY dateOfSprint DESC")
     fun getAccelerations() : List<Sprint>
+    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp>0 ORDER BY dateOfSprint DESC")
+    fun getTopEnds(): List<Sprint>
 }

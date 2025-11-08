@@ -25,16 +25,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.speedray.data.ProgressionViewModel
+import com.example.speedray.data.SprintsListViewModel
+
+
 
 @Composable
 fun MyProgressionNavHost(
     transitionToLiveData: ()-> Unit,
-    progressionViewModel: ProgressionViewModel
+    progressionViewModel: ProgressionViewModel,
+    sprintsListViewModel: SprintsListViewModel
 ){
     val navigationController = rememberNavController()
 
-    NavHost(navController = navigationController, startDestination = "SprintsList"){
+    NavHost(navController = navigationController, startDestination = "Summary"){
         composable(route= "Summary"){
+            progressionViewModel.onTopEndLoaded()
             ProgressionScreen(
                 transitionToLiveData,
                 progressionViewModel,
@@ -43,9 +48,11 @@ fun MyProgressionNavHost(
         }
 
         composable(route= "SprintsList"){
+            sprintsListViewModel.showcaseNSprints()
             SprintsScreen(
                 transitionToLiveData,
-                navigationController
+                navigationController,
+                sprintsListViewModel
             )
         }
 

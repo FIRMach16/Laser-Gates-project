@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,24 +43,62 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.speedray.R
 import com.example.speedray.data.Sprint
+import com.example.speedray.data.SprintsListViewModel
 import java.util.Date
-import java.util.logging.Filter
+import kotlin.Unit
+
+
+fun theDoNothingFunc(a: String?,b: String?){} //this is needed to get the compose preview working
+                                                // so just for dev purposes
+fun theDoNothingFunc(a: Sprint){}
 
 @Composable
-fun SprintsScreen(transitionToLiveData : ()-> Unit,
-                  navHostController: NavHostController) {
+fun SprintsScreen(transitionToSummary: ()-> Unit,
+                  navHostController: NavHostController,
+                  sprintsListViewModel: SprintsListViewModel) {
+
+    val sprintsToShowcase by sprintsListViewModel.listOfShowcasedSprints.collectAsState()
+    val numberOfSprintsToShowcase by sprintsListViewModel.numberOfSprintsToShowcase.collectAsState()
+    val typeOfSprintsToShowcase by sprintsListViewModel.typeOfSprintsToShowcase.collectAsState()
 
     SprintsLayout(
         toSummaryTransition = {navHostController.navigate("Summary")},
-        toPlotsTransition = {navHostController.navigate("SprintsPlots")}
+        toPlotsTransition = {navHostController.navigate("SprintsPlots")},
+        numberOption = numberOfSprintsToShowcase, typeOption = typeOfSprintsToShowcase,
+        changeShowcase =  fun(number: String?,type: String?){
+            //3 cases are needed :
+            // 1. when no parameter is passed (maybe not '_')
+            // 2. when only number is passed
+            // 3. when only type is passed
+            if ((number==null) and (type ==null)){
+                sprintsListViewModel.showcaseNSprints()
+            }
+            else if((number==null)){
+                if (type != null) {
+                    sprintsListViewModel.showcaseNSprints(typeOfSprints = type)
+                }
+            }
+            else if((type==null)){
+                sprintsListViewModel.showcaseNSprints(numberOfSprints = number)
+            }
+
+        },
+        sprints = sprintsToShowcase,
+        deleteSprint = fun(sprint: Sprint){
+            sprintsListViewModel.deleteSprint(sprint)
+        }
     )
 
 }
-@Preview(showBackground = true)
+
 @Composable
 fun SprintsLayout(
     toSummaryTransition : ()-> Unit={},
-    toPlotsTransition : ()->Unit={}
+    toPlotsTransition : ()->Unit={},
+    numberOption: String,typeOption: String,
+    changeShowcase:(String?, String?)-> Unit,
+    sprints : List<Sprint>,deleteSprint: (Sprint) -> Unit
+
 ){
     // should show a filtering bar with types of sprints and number of sprints to showcase
     // then a lazy column of sprints
@@ -72,40 +111,30 @@ fun SprintsLayout(
             toSprintsTransition = toPlotsTransition,
             toSummaryTransition = toSummaryTransition
         )
-        SprintsFilter()
-        SprintsList()
+        SprintsFilter(numberOption = numberOption,changeShowcase = changeShowcase, typeOption = typeOption)
+        SprintsList(sprints = sprints, deleteSprint = deleteSprint)
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun SprintsFilter(){
+fun SprintsFilter(numberOption: String="ALL",typeOption: String="ALL", changeShowcase: (String?, String?) -> Unit=::theDoNothingFunc){
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(all = 20.dp),
         verticalAlignment = Alignment.CenterVertically) {
-        SprintsTypeFilter()
-        SprintsNumberMenu()
+        SprintsTypeFilter(typeOption = typeOption,changeShowcase = changeShowcase)
+        SprintsNumberMenu(sprintNumberOption = numberOption,changeShowcase = changeShowcase)
     }
 }
 @Preview(showBackground = true)
 @Composable
-fun SprintsList(){
+fun SprintsList(sprints:List<Sprint> =emptyList<Sprint>(),
+                deleteSprint:(Sprint)-> Unit=::theDoNothingFunc){
     LazyColumn(
     ) {
-        item {
-        SprintItem()
-        }
-        item {
-            SprintItem()
-        }
-        item {
-            SprintItem()
-        }
-        item {
-            SprintItem()
-        }
-        item {
-            SprintItem()
+        items(sprints.size){idx->
+            SprintItem(sprints[idx],deleteSprint)
         }
 
 
@@ -121,7 +150,7 @@ fun SprintItem(sprint: Sprint = Sprint(
     time = 0.0f, entrySpeed = 35.0f, exitSpeed = 35.0f,
     distanceBetweenGates = 0, distanceOfBuildUp = 0,
     dateOfSprint = Date(), weight = 0, weighted = false
-)){
+),deleteSprint:(Sprint)-> Unit){
     var itemState by remember { mutableStateOf(SprintItemHeight.NORMAL) }
     val transition = updateTransition(targetState = itemState)
 
@@ -146,10 +175,10 @@ fun SprintItem(sprint: Sprint = Sprint(
 
         when(itemState){
             SprintItemHeight.NORMAL -> {
-                NormalDescription(sprint)
+                NormalDescription(sprint,deleteSprint)
             }
             SprintItemHeight.EXPANDED -> {
-                ExpandedDescription(sprint)
+                ExpandedDescription(sprint,deleteSprint)
             }
         }
 
@@ -159,8 +188,9 @@ fun SprintItem(sprint: Sprint = Sprint(
 
 }
 @Composable
-fun NormalDescription(sprint: Sprint){
-
+fun NormalDescription(sprint: Sprint,
+                      deleteSprint:(Sprint)-> Unit){
+    val descriptionSize = 12.sp
     Row(Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
@@ -182,18 +212,19 @@ fun NormalDescription(sprint: Sprint){
             Column(Modifier.weight(0.3f).fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
-                Text(stringResource(R.string.DateOfSprint))
+                Text(stringResource(R.string.DateOfSprint), fontSize = descriptionSize)
                 Text(
                     DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(sprint.dateOfSprint).toString(),
-                    textAlign = TextAlign.Center)
+                    textAlign = TextAlign.Center,
+                    fontSize = descriptionSize)
             }
             Spacer(modifier = Modifier.fillMaxWidth(0.05f))
 
             Column(Modifier.weight(0.3f).fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
-                Text(stringResource(R.string.distanceBetweenGates))
-                Text(sprint.distanceBetweenGates.toString()+" m")
+                Text(stringResource(R.string.distanceBetweenGates), fontSize = descriptionSize)
+                Text(sprint.distanceBetweenGates.toString()+" m", fontSize = descriptionSize)
             }
 
             Spacer(modifier = Modifier.fillMaxWidth(0.05f))
@@ -201,8 +232,8 @@ fun NormalDescription(sprint: Sprint){
             Column(Modifier.weight(0.3f).fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
-                Text(stringResource(R.string.time))
-                Text(sprint.time.toString()+" s")
+                Text(stringResource(R.string.time), fontSize = descriptionSize)
+                Text(sprint.time.toString()+" s", fontSize = descriptionSize)
             }
 
         }
@@ -212,15 +243,14 @@ fun NormalDescription(sprint: Sprint){
             contentDescription = "Sprint type icon",
             modifier = Modifier.weight(0.15f)
                         .fillMaxHeight(0.4f)
-                        .clickable(true, onClick = {/* Function that delete entry takes sprint as argument will
-                                                                need to see if i have to include the reload of the screen
-                                                                 or will db as liveData will suffice */})
+                        .clickable(true, onClick = {deleteSprint(sprint)})
         )
     }
 
 }
 @Composable
-fun ExpandedDescription(sprint: Sprint){
+fun ExpandedDescription(sprint: Sprint,
+                        deleteSprint:(Sprint)-> Unit){
     val descriptionSize = 11.sp
     Row(modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
@@ -330,9 +360,10 @@ fun ExpandedDescription(sprint: Sprint){
             contentDescription = "Sprint type icon",
             modifier = Modifier.weight(0.15f)
                 .fillMaxHeight(0.4f)
-                .clickable(true, onClick = {/* Function that delete entry takes sprint as argument will
-                                                                need to see if i have to include the reload of the screen
-                                                                 or will db as liveData will suffice */})
+                .clickable(true, onClick = {
+                    deleteSprint(sprint)
+
+                })
         )
     }
 }
@@ -340,7 +371,8 @@ fun ExpandedDescription(sprint: Sprint){
 
 @Composable
 fun SprintsNumberMenu(
-    sprintNumberOption: String ="All"
+    sprintNumberOption: String ="All",
+    changeShowcase: (String?, String?) -> Unit
 ){
 
         var expanded by remember { mutableStateOf(false) }
@@ -365,48 +397,75 @@ fun SprintsNumberMenu(
             ) {
                 DropdownMenuItem(
                     text = { Text("10") },
-                    onClick = { /* Do something... */ }
+                    onClick = { changeShowcase("10",null)
+                                expanded=!expanded}
                 )
                 DropdownMenuItem(
                     text = { Text("20") },
-                    onClick = { /* Do something... */ }
+                    onClick = { changeShowcase("20",null)
+                                expanded=!expanded}
                 )
                 DropdownMenuItem(
                     text = { Text("50") },
-                    onClick = { /* Do something... */ }
+                    onClick = { changeShowcase("50",null)
+                                expanded=!expanded}
                 )
                 DropdownMenuItem(
                     text = { Text("All") },
-                    onClick = { /* Do something... */ }
+                    onClick = {changeShowcase("ALL",null) }
                 )
             }
         }
     }
 @Composable
 fun SprintsTypeFilter(
-    allFilter: Boolean =  false,
-    topEndFilter:  Boolean = true,
-    accelerationFilter: Boolean = true
+
+    changeShowcase: (String?, String?) -> Unit,
+    typeOption: String
 ){
+    var allFilter: Boolean
+    var topEndFilter: Boolean
+    var accelerationFilter: Boolean
+    val labelsSize = 10.sp
+    when(typeOption){
+        "TopEnd"->{
+            allFilter=  true
+            topEndFilter = false
+            accelerationFilter= true
+        }
+        "Acceleration"->{
+            allFilter=  true
+            topEndFilter = true
+            accelerationFilter= false
+        }
+        else -> {
+            allFilter=  false
+            topEndFilter = true
+            accelerationFilter= true
+        }
+
+    }
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         Surface (modifier = Modifier
             .fillMaxWidth(0.1f)
-            .clickable(allFilter, onClick = {  }),
+            .clickable(allFilter, onClick = { changeShowcase(null,"ALL") }),
             shape = RoundedCornerShape(7.dp),
-            color = if (allFilter) {MaterialTheme.colorScheme.primary}
+            color = if (allFilter) {MaterialTheme.colorScheme.inversePrimary}
                     else{MaterialTheme.colorScheme.secondary}
         )
         {
             Text(
                 "All",
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = labelsSize
 
             )
         }
         Spacer(Modifier.fillMaxWidth(0.066f))
         Surface (modifier = Modifier
             .fillMaxWidth(0.2f)
-            .clickable(true, onClick = {  }),
+            .clickable(true, onClick = {  changeShowcase(null,"TopEnd")}),
             shape = RoundedCornerShape(7.dp),
             color = if (topEndFilter) {MaterialTheme.colorScheme.inversePrimary}
                     else{MaterialTheme.colorScheme.secondary}
@@ -414,14 +473,15 @@ fun SprintsTypeFilter(
         {
             Text(
                 "TopEnd",
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = labelsSize
 
             )
         }
         Spacer(Modifier.fillMaxWidth(0.066f))
         Surface (modifier = Modifier
             .fillMaxWidth(0.4f)
-            .clickable(true, onClick = {  }),
+            .clickable(true, onClick = { changeShowcase(null,"Acceleration") }),
             shape = RoundedCornerShape(7.dp),
             color = if (accelerationFilter) {MaterialTheme.colorScheme.inversePrimary}
             else{MaterialTheme.colorScheme.secondary}
@@ -429,7 +489,8 @@ fun SprintsTypeFilter(
         {
             Text(
                 "Acceleration",
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = labelsSize
 
             )
         }

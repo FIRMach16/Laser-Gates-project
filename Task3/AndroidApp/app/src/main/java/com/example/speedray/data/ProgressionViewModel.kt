@@ -52,7 +52,7 @@ class ProgressionViewModel(sprintDatabase: SprintDatabase): ViewModel(){
         repository = SprintRepository(sprintDao)
         // for testing ui
 
-        if(repository.getAllSprints.isEmpty()) {
+        if(repository.getAllSprints().isEmpty()) {
             val sprints = SprintDataGenerator.generateRandomSprints(5)
             val accelerations = SprintDataGenerator.generateRandomSprints(5,true)
            viewModelScope.launch(Dispatchers.IO) {
@@ -81,10 +81,8 @@ class ProgressionViewModel(sprintDatabase: SprintDatabase): ViewModel(){
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-
-
-                latestTopEnd = repository.getBestTopEnd
-                bestTopEnd = repository.getBestAcceleration
+                latestTopEnd = repository.getLatestTopEnd()
+                bestTopEnd = repository.getBestTopEnd()
                 val latestTopEndPerf = SprintPerfInfo(
                     id = latestTopEnd.id,
                     description = "Latest",
@@ -126,8 +124,8 @@ class ProgressionViewModel(sprintDatabase: SprintDatabase): ViewModel(){
             try {
 
 
-                latestAcceleration = repository.getLatestAcceleration
-                bestAcceleration = repository.getLatestAcceleration
+                latestAcceleration = repository.getLatestAcceleration()
+                bestAcceleration = repository.getBestAcceleration()
 
                 val latestAccelerationPerf = SprintPerfInfo(
                     id = latestAcceleration.id,

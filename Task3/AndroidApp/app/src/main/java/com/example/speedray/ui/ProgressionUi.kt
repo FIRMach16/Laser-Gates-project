@@ -100,7 +100,7 @@ fun NavigationButtons(
 }
 @Composable
 fun ProgressionScreen(
-    transition: () -> Unit,
+    transitionToLiveData: () -> Unit,
     progressionViewModel: ProgressionViewModel = viewModel(),
     navHostController: NavHostController
 
@@ -111,17 +111,23 @@ fun ProgressionScreen(
     val topEndClickable by progressionViewModel.topEndClickable.collectAsState()
     val accelerationClickable by progressionViewModel.accelerationClickable.collectAsState()
 
+
+
     ProgressionActivityLayout(
 
-        transitionToLiveDataActivity = transition,
+        transitionToLiveDataActivity = transitionToLiveData,
         loadAcceleration = { progressionViewModel.onAccelerationLoaded() },
         loadTopEnd = {progressionViewModel.onTopEndLoaded()},
         topEndClickable = topEndClickable,
         accelerationClickable = accelerationClickable,
         best = best,
         latest = latest,
-        transitionToPlots =  { navHostController.navigate("SprintsPlots") },
-        transitionToList = {navHostController.navigate("SprintsList")}
+        transitionToPlots =  {
+            navHostController.navigate("SprintsPlots")
+                             },
+        transitionToList = {
+            navHostController.navigate("SprintsList")
+        }
 
     )
 }
