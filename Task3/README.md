@@ -128,17 +128,25 @@ This sprint made me realise that my code is not very clean and also that i still
 
 - **Sprint6** 
 
-- Created Unit Test for database interaction (JUNIT4)
+- Created Unit Tests for database interaction (JUNIT4)
 ![](docs/SprintsDBTests.png)
 - Made modular and reusable UI with jetpack Compose (That should be cross-platform compatible?)
 - Populated the UI using stateFlow + viewModel (which a recommended practice to inrease app scalability and decrease the code coupling)
 
 You can check [here](https://github.com/FIRMach16/Laser-Gates-project/issues/5) for the video demo.
 
-Points of improvement:
-- The UI could benefit from a redesign XD
+
 
 ---
 
+- **Sprint7**
+
+- Created a UI to showcase the sprints (using LazyColumn) stored, with a filter feature that modify the number and the type of the sprints shown (acceleration , top end or mixed)
+- Fixed loading issues of the summary made in sprint6
+- Made a NavHost component to naviagte between composables (right now between Sprints list and the Summary)
+
+ 
+- Points of improvement:
+- The UI could benefit from a redesign XD
 
 
