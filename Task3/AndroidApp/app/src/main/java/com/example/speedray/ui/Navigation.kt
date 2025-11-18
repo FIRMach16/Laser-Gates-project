@@ -41,28 +41,26 @@ fun MyProgressionNavHost(
         composable(route= "Summary"){
             progressionViewModel.onTopEndLoaded()
             ProgressionScreen(
-                transitionToLiveData,
-                progressionViewModel,
-                navigationController
+                transitionToLiveData = transitionToLiveData,
+                progressionViewModel = progressionViewModel,
+                navHostController = navigationController
                 )
         }
 
         composable(route= "SprintsList"){
             sprintsListViewModel.showcaseNSprints()
             SprintsScreen(
-                transitionToLiveData,
-                navigationController,
-                sprintsListViewModel
+
+                navHostController = navigationController,
+                sprintsListViewModel = sprintsListViewModel
             )
         }
 
-//        composable(route= "SprintsPlots"){
-//            ProgressionScreen(
-//                transitionToLiveData,
-//                progressionViewModel,
-//                navigationController
-//            )
-//        }
+        composable(route= "SprintsPlots"){
+            PlotsScreen(
+                navHostController = navigationController
+            )
+        }
     }
 }
 @Preview(showBackground = true)

@@ -53,7 +53,7 @@ fun theDoNothingFunc(a: String?,b: String?){} //this is needed to get the compos
 fun theDoNothingFunc(a: Sprint){}
 
 @Composable
-fun SprintsScreen(transitionToSummary: ()-> Unit,
+fun SprintsScreen(
                   navHostController: NavHostController,
                   sprintsListViewModel: SprintsListViewModel) {
 
@@ -107,8 +107,8 @@ fun SprintsLayout(
             isSprintsClickable = false,
             isSummaryClickable = true,
             isPlotsClickable = true,
-            toPlotsTransition = {},
-            toSprintsTransition = toPlotsTransition,
+            toPlotsTransition = toPlotsTransition,
+            toSprintsTransition = {},
             toSummaryTransition = toSummaryTransition
         )
         SprintsFilter(numberOption = numberOption,changeShowcase = changeShowcase, typeOption = typeOption)
