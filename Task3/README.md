@@ -48,7 +48,7 @@ New Plan: (Changed after Sprint3)
 - **Sprint 7** Add a fragment that is hosted at progression UI that shows performances in a table format.
 - **Sprint 8** Add another fragment that is hosted at progression UI that displays plots of performances.
 - **Sprint 9** Add a filter features to the plot fragment.
-- **Sprint 10** Clean and improve UI.
+- **Sprint 10** Clean code and improve UI (REFACTORING & FIXING REMAINING BUGS).
 - **Sprint 11**: Explore coach mode and optional cloud integration.
 
 
@@ -145,8 +145,16 @@ You can check [here](https://github.com/FIRMach16/Laser-Gates-project/issues/5) 
 - Fixed loading issues of the summary made in sprint6
 - Made a NavHost component to naviagte between composables (right now between Sprints list and the Summary)
 
- 
+You can check [here](https://github.com/FIRMach16/Laser-Gates-project/issues/6) for the video demo.
+
 - Points of improvement:
 - The UI could benefit from a redesign XD
+
+---
+
+- **Sprint8**
+- Created a UI to plot the data using the composable Canavas tried to make the plot more curvy with quadraticTo (which uses a bezier curve) however when selecting a control point which belongs to the median of two points at a certain distance the angles are still sharp. I'm guessing I need to use a cubic bezier curve to have a smoother curve.
+
+
 
 
