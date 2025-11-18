@@ -24,6 +24,7 @@ import com.example.speedray.R
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.speedray.data.PlotsViewModel
 import com.example.speedray.data.ProgressionViewModel
 import com.example.speedray.data.SprintsListViewModel
 
@@ -33,7 +34,8 @@ import com.example.speedray.data.SprintsListViewModel
 fun MyProgressionNavHost(
     transitionToLiveData: ()-> Unit,
     progressionViewModel: ProgressionViewModel,
-    sprintsListViewModel: SprintsListViewModel
+    sprintsListViewModel: SprintsListViewModel,
+    plotsViewModel: PlotsViewModel
 ){
     val navigationController = rememberNavController()
 
@@ -57,8 +59,10 @@ fun MyProgressionNavHost(
         }
 
         composable(route= "SprintsPlots"){
+            plotsViewModel.onPlotsLoaded(GlobalPlotChoice.TOP_END,false)
             PlotsScreen(
-                navHostController = navigationController
+                navHostController = navigationController,
+                plotsViewModel = plotsViewModel
             )
         }
     }

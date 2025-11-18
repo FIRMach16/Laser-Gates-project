@@ -55,4 +55,14 @@ interface SprintDao {
     fun getAccelerations() : List<Sprint>
     @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp>0 ORDER BY dateOfSprint DESC")
     fun getTopEnds(): List<Sprint>
+
+    // for PlotViewModel
+    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp>0 AND weighted=:weighted ORDER BY dateOfSprint ASC")
+    fun chooseWeightedOrNotTopEnds(weighted: Boolean):List<Sprint>
+
+    @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp=0 AND weighted=:weighted ORDER BY dateOfSprint ASC")
+    fun chooseWeightedOrNotAccelerations(weighted: Boolean): List<Sprint>
+
+
+
 }

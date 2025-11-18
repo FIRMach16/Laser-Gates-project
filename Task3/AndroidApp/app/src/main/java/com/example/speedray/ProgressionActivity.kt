@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
+import com.example.speedray.data.PlotsViewModel
 import com.example.speedray.data.ProgressionViewModel
 import com.example.speedray.data.SprintDataGenerator
 import com.example.speedray.data.SprintDatabase
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 class ProgressionActivity : ComponentActivity() {
     private lateinit var progressionViewModel : ProgressionViewModel
     private lateinit var sprintsListViewModel: SprintsListViewModel
+    private lateinit var plotsViewModel: PlotsViewModel
     private lateinit var sprintDatabase: SprintDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +33,15 @@ class ProgressionActivity : ComponentActivity() {
         lifecycleScope.launch (Dispatchers.IO){
                progressionViewModel = ProgressionViewModel(sprintDatabase)
                sprintsListViewModel = SprintsListViewModel(sprintDatabase)
+                plotsViewModel= PlotsViewModel(sprintDatabase)
         }
 
         setContent {
 //            ProgressionScreen({switchToLiveData()},progressionViewModel)
             MyProgressionNavHost({switchToLiveData()}
                 ,progressionViewModel,
-                sprintsListViewModel)
+                sprintsListViewModel,
+                plotsViewModel)
         }
 
 

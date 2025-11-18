@@ -67,6 +67,16 @@ class SprintRepository(private  val sprintDao : SprintDao){
     }
 
 
+    fun chooseWeightedOrNotAccelerations(weighted: Boolean): List<Sprint>{
+        return sprintDao.chooseWeightedOrNotAccelerations(weighted)
+    }
+    fun chooseWeightedOrNotTopEnds(weighted: Boolean): List<Sprint>{
+       return sprintDao.chooseWeightedOrNotTopEnds(weighted)
+    }
+
+
+
+
 
 
 
