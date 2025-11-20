@@ -14,7 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,6 +38,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -44,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.speedray.R
 import com.example.speedray.data.PlotsViewModel
 import java.util.Locale
 import kotlin.math.pow
@@ -52,23 +59,29 @@ import kotlin.random.Random
 enum class GlobalPlotChoice{
     TOP_END,ACCELERATION
 }
-val backgroundColor = Color(0xFF402548)
-val barColor = Color(0xFFAA8CE3)
+val backgroundColor = Color(0xFF020000)
+val textColor = Color(0xFFFFFFFF)
+val deactivatedTextColor =Color(0xFF484545)
+val barColor = Color(0xFF525151)
 
-val indicatorsColor = Color(0xFF83C925)
+val indicatorsColor = Color(0xFF25C99B)
+val plotColor =  Color(0xFF25C99B)
 
-val selectedChoiceBarColor = Color(0xFFB374D9)
+val selectedChoiceBarColor = Color(0xFF545254)
+val canvasColor =  Color(0xFF282626)
 @Composable
 fun PlotsScreen(navHostController: NavHostController,plotsViewModel: PlotsViewModel){
 
     val avgSpeeds by plotsViewModel.listOfAverageSpeed.collectAsState()
     val times by plotsViewModel.listOfTimes.collectAsState()
+    val distances by plotsViewModel.listOfShowcasedDistances.collectAsState()
     PlotsLayout(
 
         toSummaryTransition = { navHostController.navigate("Summary") },
         toSprintsTransition = { navHostController.navigate("SprintsList") },
-        avgSpeeds = avgSpeeds, times = times,
-        changePlottedData = {plotChoice,weighted -> plotsViewModel.onPlotsLoaded(plotChoice,weighted)}
+        avgSpeeds = avgSpeeds, times = times, distances = distances,
+        changePlottedData = {plotChoice,weighted -> plotsViewModel.onPlotsLoaded(plotChoice,weighted)},
+        changeShowcasedData = {distanceChosen-> plotsViewModel.changeShowcasedData(distanceChosen)}
     )
 
 }
@@ -79,9 +92,10 @@ fun PlotsLayout(
     toSummaryTransition:()-> Unit={},
     avgSpeeds: List<Float> =emptyList(),
     times:List<Float> =emptyList(),
-    changePlottedData: (GlobalPlotChoice, Boolean)-> Unit= {a,b ->} //this is a substitute for the do nothing
+    distances: List<Int> =emptyList(),
+    changePlottedData: (GlobalPlotChoice, Boolean)-> Unit= {a,b ->}, //this is a substitute for the do nothing
     // function in SprintUi (will change it when refactoring) TODO: Refactor SprintUi (the doNothingFunc Should go)
-
+    changeShowcasedData: (Int) ->Unit = {a ->}
 ){
     Column(modifier = Modifier.background(backgroundColor).fillMaxSize(), verticalArrangement = Arrangement.Top) {
         NavigationBar(
@@ -90,9 +104,14 @@ fun PlotsLayout(
             isPlotsClickable = false,
             toPlotsTransition = {},
             toSprintsTransition = toSprintsTransition,
-            toSummaryTransition = toSummaryTransition
+            toSummaryTransition = toSummaryTransition,
+            defaultColor = textColor
         )
-        Plots(times, avgSpeeds,changePlottedData)
+        Plots(times
+            , avgSpeeds,
+            distances,
+            changePlottedData,
+            changeShowcasedData)
     }
 }
 
@@ -100,17 +119,30 @@ fun PlotsLayout(
 fun Plots(
           times: List<Float> = emptyList(),
           avgSpeeds: List<Float> = emptyList(),
-          changePlottedData: (GlobalPlotChoice, Boolean) -> Unit ={a,b->}
+          distances: List<Int> =emptyList(),
+          changePlottedData: (GlobalPlotChoice, Boolean) -> Unit ={a,b->},
+          changeShowcasedData: (Int) -> Unit ={a->}
 ){
 
 
-    Column() {
+    Column(modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally) {
         //TopEnd , Acceleration and weighted selector
         GlobalFilter(changePlottedData)
         //Time Plot
-        ChartPlot(numberOfElements = times.size, valuesToDraw = times)
+        Text("Times (s)",
+            fontSize = 30.sp,
+            color = textColor,
+            textAlign = TextAlign.Center)
+        DistanceChooser(distances,changeShowcasedData)
+        ChartPlot( valuesToDraw = times)
+        Spacer(Modifier.height(30.dp))
         //avgSpeed
-        ChartPlot(numberOfElements = avgSpeeds.size, valuesToDraw = avgSpeeds)
+        Text("Average speeds (KM/h)",
+            fontSize = 30.sp,
+            color = textColor,
+            textAlign = TextAlign.Center)
+        ChartPlot( valuesToDraw = avgSpeeds)
 
     }
 }
@@ -148,7 +180,7 @@ fun GlobalFilter(changePlottedData: (GlobalPlotChoice, Boolean) -> Unit = {a,b->
         Row(modifier = Modifier.weight(0.3f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center){
-            Text("Weighted")
+            Text("Weighted", color = textColor)
             Checkbox(
                 checked = checked,
                 onCheckedChange = { checked = !checked
@@ -181,7 +213,7 @@ fun SelectorContent(id: GlobalPlotChoice, //to modify the bar bellow the text
         } )  ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
-        Text(text, textAlign = TextAlign.Center)
+        Text(text, textAlign = TextAlign.Center, color =textColor)
         Spacer(Modifier.height(1.dp))
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -203,7 +235,7 @@ fun SelectorContent(id: GlobalPlotChoice, //to modify the bar bellow the text
     }
 }
 @Composable
-fun ChartPlot(numberOfElements: Int,valuesToDraw: List<Float>){
+fun ChartPlot(valuesToDraw: List<Float>){
     val textMeasurer = rememberTextMeasurer()
     Box(
         modifier = Modifier
@@ -215,6 +247,8 @@ fun ChartPlot(numberOfElements: Int,valuesToDraw: List<Float>){
                 .padding(8.dp)
                 .aspectRatio(16 / 9f)
                 .fillMaxSize()
+                .background(canvasColor)
+
 
         ) {
 
@@ -250,69 +284,97 @@ fun ChartPlot(numberOfElements: Int,valuesToDraw: List<Float>){
             }
             if (!valuesToDraw.isEmpty()) {
                 //plot
-                val path = generatePath(
-                    data = valuesToDraw, size
-                )
-                drawPath(path, Color.Green, style = Stroke(1.5f.dp.toPx()))
-                //adding coloring
-                val gradientPath = Path()
-                gradientPath.addPath(path)
-                gradientPath.lineTo(size.width, size.height)
-                gradientPath.lineTo(0f, size.height)
-                gradientPath.close()
-                val gradientBrush = Brush.verticalGradient(
-                    listOf(
-                        Color.Green.copy(0.5f),
-                        Color.Transparent
+                if (valuesToDraw.size == 1) {
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = String.format(Locale.ENGLISH, "%.2f", valuesToDraw[0]),
+                        topLeft = Offset(size.width*0.4f, size.height * 0.4f),
+                        style =
+                            TextStyle(
+                                color = indicatorsColor,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
                     )
-                )
-                drawPath(gradientPath, gradientBrush, style = Fill)
+
+                } else {
+                    val path = generatePath(
+                        data = valuesToDraw, size
+                    )
+                    drawPath(path, color = plotColor, style = Stroke(1.5f.dp.toPx()))
+                    //adding coloring
+                    val gradientPath = Path()
+                    gradientPath.addPath(path)
+                    gradientPath.lineTo(size.width, size.height)
+                    gradientPath.lineTo(0f, size.height)
+                    gradientPath.close()
+                    val gradientBrush = Brush.verticalGradient(
+                        listOf(
+                            indicatorsColor.copy(0.5f),
+                            Color.Transparent
+                        )
+                    )
+                    drawPath(gradientPath, gradientBrush, style = Fill)
 
 
-                //value indicators
+                    //value indicators
 
-                //min => best time or worst speed
-                drawLine(
-                    barColor,
-                    start = Offset(0f, 0.9f * size.height),
-                    end = Offset(size.width, 0.9f * size.height),
-                    strokeWidth = barWidthPx,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 10f), 5f)
-                )
+                    //min => best time or worst speed
+                    drawLine(
+                        barColor,
+                        start = Offset(0f, 0.9f * size.height),
+                        end = Offset(size.width, 0.9f * size.height),
+                        strokeWidth = barWidthPx,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 10f), 5f)
+                    )
 
-                //max => worst time or best avg speed
-                drawLine(
-                    barColor,
-                    start = Offset(0f, 0.1f * size.height),
-                    end = Offset(size.width, 0.1f * size.height),
-                    strokeWidth = barWidthPx,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 10f), 5f)
-                )
+                    //max => worst time or best avg speed
+                    drawLine(
+                        barColor,
+                        start = Offset(0f, 0.1f * size.height),
+                        end = Offset(size.width, 0.1f * size.height),
+                        strokeWidth = barWidthPx,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 10f), 5f)
+                    )
 
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = String.format(Locale.ENGLISH, "%.2f", valuesToDraw.max()),
-                    topLeft = Offset(0f, size.height * 0.03f),
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = String.format(Locale.ENGLISH, "%.2f", valuesToDraw.max()),
+                        topLeft = Offset(0f, size.height * 0.03f),
 
-                    style =
-                        TextStyle(
-                            color = indicatorsColor,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                )
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = String.format(Locale.ENGLISH, "%.2f", valuesToDraw.min()),
-                    topLeft = Offset(0f, size.height * 0.9f),
+                        style =
+                            TextStyle(
+                                color = indicatorsColor,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                    )
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = "${valuesToDraw.size} Sprints",
+                        topLeft = Offset(size.width*0.8f, size.height * 0.03f),
 
-                    style =
-                        TextStyle(
-                            color = indicatorsColor,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                )
+                        style =
+                            TextStyle(
+                                color = indicatorsColor,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                    )
+
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = String.format(Locale.ENGLISH, "%.2f", valuesToDraw.min()),
+                        topLeft = Offset(0f, size.height * 0.9f),
+
+                        style =
+                            TextStyle(
+                                color = indicatorsColor,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                    )
+                }
             }
         }
     }
@@ -441,24 +503,53 @@ fun calculateControlPoint(
 
 
 }
-//
-//@Composable
-//fun CheckboxMinimalExample() {
-//
-//
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//    ) {
-//        Text(
-//            "Minimal checkbox"
-//        )
-//        Checkbox(
-//            checked = checked,
-//            onCheckedChange = { checked = it }
-//        )
-//    }
-//
-//    Text(
-//        if (checked) "Checkbox is checked" else "Checkbox is unchecked"
-//    )
-//}
+
+@Composable
+fun DistanceChooser(distances: List<Int>,
+                    changeShowcasedData:(Int)-> Unit ={a->}){
+
+
+    var expanded by remember { mutableStateOf(false) }
+    var selectorText by remember { mutableStateOf("All distances") }
+
+    val activeNotActiveColor = if(distances.isEmpty()){
+        deactivatedTextColor
+    }
+    else{
+        textColor
+    }
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(1.0f)
+    ) {
+        IconButton(onClick = { expanded = !expanded }, modifier = Modifier.fillMaxWidth()) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(selectorText,
+                    color =activeNotActiveColor)
+                Spacer(modifier = Modifier.width(10.dp))
+                Icon(
+                    painterResource(R.drawable.ic_bottom_arrow),
+                    contentDescription = "More options", tint = activeNotActiveColor
+                )
+            }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            distances.forEach { distance->
+                DropdownMenuItem(
+                    text = { Text(distance.toString()) },
+                    onClick = { changeShowcasedData(distance)
+                            selectorText=distance.toString()
+                        expanded=!expanded}
+                )
+            }
+
+
+
+        }
+    }
+
+}

@@ -63,6 +63,12 @@ interface SprintDao {
     @Query("SELECT * FROM sprints_table WHERE distanceOfBuildUp=0 AND weighted=:weighted ORDER BY dateOfSprint ASC")
     fun chooseWeightedOrNotAccelerations(weighted: Boolean): List<Sprint>
 
+    @Query("SELECT DISTINCT distanceBetweenGates FROM sprints_table WHERE distanceOfBuildUp>0 AND weighted=:weighted")
+    fun getDistancesOfTopEnds(weighted: Boolean): List<Int>
+
+
+    @Query("SELECT DISTINCT distanceBetweenGates FROM sprints_table WHERE distanceOfBuildUp=0 AND weighted=:weighted")
+    fun getDistancesOfAccelerations(weighted: Boolean): List<Int>
 
 
 }

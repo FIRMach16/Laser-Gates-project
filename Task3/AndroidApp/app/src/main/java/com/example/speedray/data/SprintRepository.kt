@@ -74,6 +74,13 @@ class SprintRepository(private  val sprintDao : SprintDao){
        return sprintDao.chooseWeightedOrNotTopEnds(weighted)
     }
 
+    fun getDistancesOfTopEnds(weighted: Boolean): List<Int>{
+        return sprintDao.getDistancesOfTopEnds(weighted)
+    }
+
+    fun getDistancesOfAccelerations(weighted: Boolean): List<Int>{
+        return sprintDao.getDistancesOfAccelerations(weighted)
+    }
 
 
 

@@ -75,7 +75,9 @@ fun NavigationBar(
     isPlotsClickable:Boolean = false,
     toSprintsTransition : ()-> Unit = {},
     toSummaryTransition : ()->Unit = {},
-    toPlotsTransition: () -> Unit= {}
+    toPlotsTransition: () -> Unit= {},
+    defaultColor: Color =Color(0xFF000000),
+    activatedColor: Color = Color(0xFF1F8EEC)
 ){
     val borderWidth = 0.dp
     val textSize = 10.sp
@@ -86,8 +88,8 @@ fun NavigationBar(
             contentAlignment = Alignment.Center){
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 val iconColor = when(isSprintsClickable){
-                    true-> Color(0xFF000000)
-                    false-> Color(0xFF1F8EEC)
+                    true-> defaultColor
+                    false-> activatedColor
                 }
                 Icon(
                     painter = painterResource(R.drawable.ic_sprints_list),
@@ -103,8 +105,8 @@ fun NavigationBar(
             .weight(0.3f),
             contentAlignment = Alignment.Center){
             val iconColor = when(isSummaryClickable){
-                true-> Color(0xFF000000)
-                false-> Color(0xFF1F8EEC)
+                true-> defaultColor
+                false-> activatedColor
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
@@ -121,8 +123,8 @@ fun NavigationBar(
             .weight(0.3f),
             contentAlignment = Alignment.Center){
             val iconColor = when(isPlotsClickable){
-                true-> Color(0xFF000000)
-                false-> Color(0xFF1F8EEC)
+                true-> defaultColor
+                false-> activatedColor
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
