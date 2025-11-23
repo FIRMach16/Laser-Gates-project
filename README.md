@@ -8,5 +8,7 @@ These tasks are milestones in the project that demonstrate my learning process:
 - [Task1](Task1/) : Creating a websocket and publishing the timestamp on a button click
 - [Task2](Task2/TwoGateSystem/) : A two gates system (uses button for now) that communicates VIA ESP-NOW and publish the metrics that i think are important (Time diffrence ,2 Instant Speeds for each gate) with websocket, **TODO :Measure the 2 way latencey of the ESP protocol to verify time keeping accuracy**
 
-- [Task3](Task3/) : Android app made with Android Studio (still in active developement)
+- [Task3](Task3/) : Android app made with Android Studio (base functionalities Complete) **TODO: Code refactoring, bug fixing, and improving UI**
+
+- [Task4](Task4/) : PCB (Kicad) + BOM (excel) + Enclosure (software :still undecided) (just began , the objective is assuring functionality while keeping it cheap as possible) 
 
