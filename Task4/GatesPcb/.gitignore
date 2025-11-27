@@ -1,0 +1,9 @@
+connectors.bak
+fp-info-cache
+GatesPcb.kicad_prl
+*-autosave.*
+\#auto_saved_files\#
+~GatesPcb.kicad_sch.lck
+GatesPcb-backups/
+sym-lib-table
+connectors.kicad_sym
