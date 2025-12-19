@@ -1,0 +1,90 @@
+(footprint "UART_Connectors_Place"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -2.54 -5.08 90)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "0034b7a8-ca02-4aa2-8dfd-9a8ffea1f143")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "UART_Connectors_Place"
+		(at 3.048 -3.048 90)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "a9b4568d-a834-4231-9207-b00d44bd81c0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "66efe54d-b09e-4a2d-9d1c-6dd4893c3302")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f4e4196a-df9d-4a84-8bdc-7cf23a9e4d7d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 1.5 1.5)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "3446cd7f-7087-4ae8-8150-eee29b8ad113")
+	)
+	(pad "2" thru_hole circle
+		(at 0 -2.54)
+		(size 1.5 1.5)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "6722e877-51a7-4074-a6e9-cd1da66d709c")
+	)
+	(pad "3" thru_hole circle
+		(at 0 -5.08)
+		(size 1.5 1.5)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "58fcfb2a-3c1a-40ca-ba2d-4cbf3550f077")
+	)
+	(pad "4" thru_hole circle
+		(at 0 -7.62)
+		(size 1.5 1.5)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "1251ae91-66b9-4dc9-aceb-06f13b4d7f70")
+	)
+	(embedded_fonts no)
+)

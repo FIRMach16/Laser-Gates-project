@@ -1,0 +1,74 @@
+(footprint "BOOT_Connectors_Place"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -2.54 -3.302 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "b269074c-b933-4008-9535-bf0ddee00196")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "BOOT"
+		(at -4.064 -1.524 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "4b2c0d06-dd8e-4403-8451-f93b6ca7317e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "25bfb24f-c90c-4274-a769-d5d623c43f4e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7ef4e2a2-556d-4fcc-a97c-9429111181d6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 1.5 1.5)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "03c2dd31-e627-4aa4-9e0a-2f317099cf79")
+	)
+	(pad "2" thru_hole circle
+		(at 0 -2.54)
+		(size 1.5 1.5)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "748d1268-6765-4765-a0d6-956cd0d9c8b0")
+	)
+	(embedded_fonts no)
+)
