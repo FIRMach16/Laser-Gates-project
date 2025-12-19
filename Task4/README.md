@@ -34,5 +34,18 @@ To document my progress in this task I will use a journal-like format where I ju
     2. Switching between Bluetooth (For Audio Commands) and Wifi (Which will command the EndGate to start the Timer) may introduce delay in timekeeping (I want the accumulated delay to be less than 10ms). A potential workaround is to send the introduced delay value alongside the signal to start the timer, and then include it in the calculations of the sprint time.
     - What All of this mean that I need to use the ESP32 familly instead of others because it's the only one that provide the BR (basic rate) bluetooth, so no ESP32-S2.
     - Hopefully I don't change my opinion again.
+- 19/12/2025:
+      - At the end I decided to use a wired in speaker instead of a bluetooth one because the bluetooth present an unacceptable delay (100ms) with no way of including it in the calculations.
+      - As of today the first pcb version is complete.
+
     
-    
+
+<img width="1081" height="611" alt="Screenshot from 2025-12-19 17-19-24" src="https://github.com/user-attachments/assets/21b760d3-fffd-4007-93e8-bbe5a7339f11" />
+
+**Features :**
+- 2 layers PCB.
+- An 3.3v LDO to regulate voltage.
+- A MAX98357A amplifier to use a built-in speaker with the I2S protocol.
+- An esp32-solo2 as the microcontroller of the chip.
+- For the power I'm planning to use a 3.7v LiPo battery which will have it's connector plugged in at the bottom right of the board.
+
