@@ -47,3 +47,5 @@ To document my progress in this task I will use a journal-like format where I ju
 - An 3.3v LDO to regulate voltage.
 - A MAX98357A amplifier to use a built-in speaker with the I2S protocol.
 - An esp32-solo2 as the microcontroller of the chip.
+- For the power I'm planning to use a 3.7v LiPo battery which will have it's connector plugged in at the bottom right of the board.
+- F
