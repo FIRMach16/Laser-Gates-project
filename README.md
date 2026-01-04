@@ -10,5 +10,5 @@ These tasks are milestones in the project that demonstrate my learning process:
 
 - [Task3](Task3/) : Android app made with Android Studio (base functionalities Complete) **TODO: Code refactoring, bug fixing, and improving UI**
 
-- [Task4](Task4/) : PCB (Kicad) + BOM (excel) + Enclosure (software :still undecided) (just began , the objective is assuring functionality while keeping it cheap as possible) 
+- [Task4](Task4/) : PCB (Kicad) + BOM (excel) + Enclosure (software :still undecided) (PCB and BOM done waiting on components  ) 
 
